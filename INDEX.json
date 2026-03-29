@@ -1,0 +1,73 @@
+{
+  "last_updated": "2026-03-29 12:54",
+  "research_directions": [
+    {
+      "name": "Agent 协作实践",
+      "path": "./Agent 协作实践",
+      "topics": [
+        {
+          "name": "对比评测",
+          "path": "./Agent 协作实践/对比评测",
+          "reports": []
+        },
+        {
+          "name": "最佳实践",
+          "path": "./Agent 协作实践/最佳实践",
+          "reports": [
+            {
+              "name": "设计实践",
+              "filename": "设计实践.md",
+              "path": "./Agent 协作实践/最佳实践/设计实践.md",
+              "version": "1.0",
+              "date": "26-03"
+            }
+          ]
+        },
+        {
+          "name": "源码分析",
+          "path": "./Agent 协作实践/源码分析",
+          "reports": []
+        },
+        {
+          "name": "演进史",
+          "path": "./Agent 协作实践/演进史",
+          "reports": []
+        }
+      ]
+    },
+    {
+      "name": "前端状态管理",
+      "path": "./前端状态管理",
+      "topics": [
+        {
+          "name": "对比评测",
+          "path": "./前端状态管理/对比评测",
+          "reports": []
+        },
+        {
+          "name": "最佳实践",
+          "path": "./前端状态管理/最佳实践",
+          "reports": []
+        },
+        {
+          "name": "源码分析",
+          "path": "./前端状态管理/源码分析",
+          "reports": []
+        },
+        {
+          "name": "演进史",
+          "path": "./前端状态管理/演进史",
+          "reports": [
+            {
+              "name": "report_v1.2",
+              "filename": "report_v1.2.md",
+              "path": "./前端状态管理/演进史/report_v1.2.md",
+              "version": "v1.2",
+              "date": "26-03"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

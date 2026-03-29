@@ -23,6 +23,11 @@
 | 本文档 | AI Agent |
 | [QUICKSTART.md](../QUICKSTART.md) | 人类快速开始 |
 | [.scripts/README.md](../.scripts/) | 脚本说明 |
+| [.mygit/README.md](../.mygit/) | Git 提交规范 |
+
+---
+
+## 目录结构
 
 ```
 research/
@@ -31,11 +36,11 @@ research/
 │
 ├── .scripts/                # 自动化脚本
 │   ├── README.md
-│   ├── generate_index.py
-│   ├── create_direction.py
-│   ├── create_report.py
-│   ├── bump_version.py
-│   └── git-pre-commit
+│   └── generate_index.py    # 核心索引生成器
+│
+├── .mygit/                  # Git 规范
+│   ├── README.md            # 提交规范说明
+│   └── commit-template.md   # 提交模板
 │
 ├── <技术方向>/              # 一级目录（自动发现）
 │   └── <研究主题>/          # 二级目录（自动发现）
@@ -53,7 +58,7 @@ research/
 
 ```python
 # 跳过目录
-SKIP_DIRS = {"__pycache__", ".git", ".vscode", "node_modules", ".agent", ".scripts"}
+SKIP_DIRS = {"__pycache__", ".git", ".vscode", "node_modules", ".agent", ".scripts", ".mygit"}
 
 # 跳过文件
 SKIP_FILES = {"template.md"}
@@ -79,27 +84,63 @@ research/
 
 ---
 
-## 报告元数据格式
+## Git 提交规范
 
-每个报告文件开头应包含：
+### 核心规则
 
-```markdown
-# <报告标题>
+> ⚠️ **Agent 提交前必须询问人类确认**
 
-> **版本**：v1.0  
-> **更新**：2026-03
+### 提交类型（可组合）
+
+| 类型 | 含义 | 示例 |
+|------|------|------|
+| `feat` | 新增：功能、模块、规则 | `feat: 新增研究方向` |
+| `fix` | 修复：Bug、纠错、修正 | `fix: 修复脚本错误` |
+| `docs` | 文档：README、说明、注释 | `docs: 更新使用说明` |
+| `refactor` | 重构：结构优化（不影响功能） | `refactor: 脚本移至 .scripts` |
+| `config` | 配置：Git、工具、环境变量 | `config: 初始化提交模板` |
+
+### 组合示例
+
+```
+[feat+config] 新增功能并修改配置
+[refactor+docs] 重构结构并更新文档
 ```
 
-### 提取逻辑
+### 提交格式
 
-```python
-# 版本号提取
-1. 优先从文件名：report_v1.2.md → v1.2
-2. 其次从内容：**版本**：v1.2
+```
+[类型] 简短描述
 
-# 日期提取
-1. 优先从内容：**更新**：2026-03
-2. 其次从文件修改时间
+提交者：[human | agent]
+
+## Why（为什么做）
+
+## What（做了什么）
+```
+
+### 提交者标识
+
+| 标识 | 说明 |
+|------|------|
+| `human` | 人类主动编写内容 |
+| `agent` | AI Agent 生成/修改内容 |
+
+### 示例
+
+```
+[feat] 生成索引文件
+
+提交者：agent
+
+## Why（为什么做）
+
+用户创建了新的报告文件，需要更新索引。
+
+## What（做了什么）
+
+- 运行 generate_index.py
+- 更新 INDEX.json 和 README.md
 ```
 
 ---
@@ -127,8 +168,10 @@ for topic in 演进史 源码分析 对比评测 最佳实践; do
 EOF
 done
 
-# 3. 触发索引更新（Git commit 或手动）
+# 3. 触发索引更新
 python .scripts/generate_index.py
+
+# 4. 询问人类是否提交
 ```
 
 ### 新增报告
@@ -141,6 +184,8 @@ cp <方向>/<主题>/template.md <方向>/<主题>/<报告名>.md
 
 # 3. 触发索引更新
 python .scripts/generate_index.py
+
+# 4. 询问人类是否提交
 ```
 
 ### 更新报告
@@ -149,7 +194,7 @@ python .scripts/generate_index.py
 # 1. 编辑报告内容
 # 2. 更新版本号：**版本**：v1.0 → **版本**：v1.1
 # 3. 更新日期：**更新**：2026-03 → **更新**：2026-04
-# 4. 触发索引更新
+# 4. 询问人类是否提交
 ```
 
 ---
@@ -160,61 +205,8 @@ python .scripts/generate_index.py
 
 ```python
 # 功能：扫描目录，生成 INDEX.json 和 README.md
-# 输入：无
-# 输出：INDEX.json, README.md
 # 调用：python .scripts/generate_index.py
-```
-
-### create_direction.py
-
-```python
-# 功能：创建新技术方向
-# 输入：sys.argv[1] = 方向名
-# 输出：目录结构 + 模板
-# 调用：python .scripts/create_direction.py <方向名>
-```
-
-### create_report.py
-
-```python
-# 功能：创建新报告
-# 输入：sys.argv[1] = 方向，sys.argv[2] = 主题，sys.argv[3] = 报告名
-# 输出：报告文件
-# 调用：python .scripts/create_report.py <方向> <主题> <报告名>
-```
-
-### bump_version.py
-
-```python
-# 功能：更新报告版本号
-# 输入：sys.argv[1] = 报告路径，sys.argv[2] = 新版本（可选）
-# 输出：更新后的文件
-# 调用：python .scripts/bump_version.py <路径> [新版本]
-```
-
----
-
-## Git Hook 机制
-
-### 安装
-
-```bash
-cp .scripts/git-pre-commit .git/hooks/pre-commit
-chmod +x .git/hooks/pre-commit
-```
-
-### 触发流程
-
-```
-git commit
-  ↓
-pre-commit hook
-  ↓
-generate_index.py
-  ↓
-git add INDEX.json README.md
-  ↓
-commit 继续
+# 触发：Git Hook 自动 / 手动调用
 ```
 
 ---
@@ -233,9 +225,10 @@ commit 继续
 ## 设计原则
 
 1. **DRY** - 信息只在一处维护
-2. **自动化优先** - 能自动的绝不手动
-3. **目录即数据** - 结构决定内容
-4. **Git 原生** - 版本管理是核心
+2. **YAGNI** - 不创建"可能有用"的文件
+3. **自动化优先** - 能自动的绝不手动
+4. **目录即数据** - 结构决定内容
+5. **Git 原生** - 版本管理是核心
 
 ---
 
@@ -245,15 +238,20 @@ commit 继续
 # 生成索引
 python .scripts/generate_index.py
 
-# 创建方向
-python .scripts/create_direction.py <名>
+# 提交（自动打开模板）
+git commit
 
-# 创建报告
-python .scripts/create_report.py <方向> <主题> <名>
+# 查看历史
+git log --oneline
 
-# 更新版本
-python .scripts/bump_version.py <路径>
-
-# 安装 Hook
-cp .scripts/git-pre-commit .git/hooks/pre-commit
+# 查看某类型提交
+git log --grep="\[feat\]" --oneline
 ```
+
+---
+
+## 重要提醒
+
+> ⚠️ **Agent 每次提交前必须询问人类**
+> 
+> 即使改动很小，也要确认后再执行 `git commit`

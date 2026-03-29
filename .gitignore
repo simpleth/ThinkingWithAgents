@@ -22,5 +22,6 @@ Thumbs.db
 # 日志
 *.log
 
-# Git
-.mygit/
+# Git 临时文件
+.mygit/*.tmp
+.mygit/*.msg

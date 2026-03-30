@@ -1,37 +1,22 @@
 {
-  "last_updated": "2026-03-29 12:54",
+  "last_updated": "2026-03-30 18:56",
   "research_directions": [
     {
-      "name": "Agent 协作实践",
-      "path": "./Agent 协作实践",
+      "name": "Agent协作",
+      "path": "./Agent协作",
       "topics": [
         {
-          "name": "对比评测",
-          "path": "./Agent 协作实践/对比评测",
-          "reports": []
-        },
-        {
-          "name": "最佳实践",
-          "path": "./Agent 协作实践/最佳实践",
+          "name": "实践经验总结",
+          "path": "./Agent协作/实践经验总结",
           "reports": [
             {
               "name": "设计实践",
               "filename": "设计实践.md",
-              "path": "./Agent 协作实践/最佳实践/设计实践.md",
+              "path": "./Agent协作/实践经验总结/设计实践.md",
               "version": "1.0",
               "date": "26-03"
             }
           ]
-        },
-        {
-          "name": "源码分析",
-          "path": "./Agent 协作实践/源码分析",
-          "reports": []
-        },
-        {
-          "name": "演进史",
-          "path": "./Agent 协作实践/演进史",
-          "reports": []
         }
       ]
     },
@@ -39,21 +24,6 @@
       "name": "前端状态管理",
       "path": "./前端状态管理",
       "topics": [
-        {
-          "name": "对比评测",
-          "path": "./前端状态管理/对比评测",
-          "reports": []
-        },
-        {
-          "name": "最佳实践",
-          "path": "./前端状态管理/最佳实践",
-          "reports": []
-        },
-        {
-          "name": "源码分析",
-          "path": "./前端状态管理/源码分析",
-          "reports": []
-        },
         {
           "name": "演进史",
           "path": "./前端状态管理/演进史",
@@ -66,6 +36,40 @@
               "date": "26-03"
             }
           ]
+        }
+      ]
+    },
+    {
+      "name": "文生视频模型",
+      "path": "./文生视频模型",
+      "topics": [
+        {
+          "name": "对比评测",
+          "path": "./文生视频模型/对比评测",
+          "reports": [
+            {
+              "name": "2026 主流模型全景对比",
+              "filename": "2026 主流模型全景对比.md",
+              "path": "./文生视频模型/对比评测/2026 主流模型全景对比.md",
+              "version": "1.0",
+              "date": "26-03"
+            }
+          ]
+        },
+        {
+          "name": "最佳实践",
+          "path": "./文生视频模型/最佳实践",
+          "reports": []
+        },
+        {
+          "name": "源码分析",
+          "path": "./文生视频模型/源码分析",
+          "reports": []
+        },
+        {
+          "name": "演进史",
+          "path": "./文生视频模型/演进史",
+          "reports": []
         }
       ]
     }

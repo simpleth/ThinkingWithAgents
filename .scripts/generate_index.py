@@ -120,9 +120,9 @@ def render_report_links(research_dirs):
         content += f"**{direction['name']}**\n\n"
         for topic in direction["topics"]:
             if topic["reports"]:
-                content += f"- **{topic['name']}**: "
-                links = [f"[{r['name']}]({r['path']}) `{r['version']}`" for r in topic["reports"]]
-                content += "  |  ".join(links) + "\n"
+                content += f"- **{topic['name']}**:\n"
+                for r in topic["reports"]:
+                    content += f"  - [{r['name']}]({r['path']}) `{r['version']}`\n"
         content += "\n"
     return content
 

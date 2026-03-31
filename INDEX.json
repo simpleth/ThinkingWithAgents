@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-01 01:57",
+  "last_updated": "2026-04-01 02:00",
   "research_directions": [
     {
       "name": "Agent协作",
@@ -74,21 +74,6 @@
               "date": "26-03"
             }
           ]
-        },
-        {
-          "name": "最佳实践",
-          "path": "./文生视频模型/最佳实践",
-          "reports": []
-        },
-        {
-          "name": "源码分析",
-          "path": "./文生视频模型/源码分析",
-          "reports": []
-        },
-        {
-          "name": "演进史",
-          "path": "./文生视频模型/演进史",
-          "reports": []
         }
       ]
     }

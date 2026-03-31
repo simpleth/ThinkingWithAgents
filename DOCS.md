@@ -12,3 +12,4 @@
 | [.mygit/README.md](./.mygit/) | Git 提交规范 |
 | [.scripts/README.md](./.scripts/) | 脚本工具说明 |
 | [.docs/REPORT_GUIDE.md](./.docs/) | 报告编写规范 |
+| [.agent/README.md](./.agent/) | Agent 工具库 |

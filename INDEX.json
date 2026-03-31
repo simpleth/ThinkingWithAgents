@@ -1,11 +1,6 @@
 {
-  "last_updated": "2026-04-01 01:49",
+  "last_updated": "2026-04-01 01:57",
   "research_directions": [
-    {
-      "name": "-p",
-      "path": "./-p",
-      "topics": []
-    },
     {
       "name": "Agent协作",
       "path": "./Agent协作",

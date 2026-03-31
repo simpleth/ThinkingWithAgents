@@ -2,10 +2,12 @@
 # Git pre-commit hook: 自动更新索引
 # 安装：cp .scripts/git-pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# 获取项目根目录（.git 的父目录）
+GIT_DIR=$(git rev-parse --git-dir)
+PROJECT_ROOT="$(cd "$GIT_DIR/.." && pwd)"
 
 echo "🔄 更新索引..."
-python "$SCRIPT_DIR/generate_index.py"
+python "$PROJECT_ROOT/.scripts/generate_index.py"
 
 # 如果有变更，自动添加到暂存区
 if ! git diff --quiet --exit-code -- INDEX.json README.md 2>/dev/null; then

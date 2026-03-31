@@ -11,3 +11,4 @@
 | [QWEN.md](./QWEN.md) | Agent 项目规范 |
 | [.mygit/README.md](./.mygit/) | Git 提交规范 |
 | [.scripts/README.md](./.scripts/) | 脚本工具说明 |
+| [.docs/REPORT_GUIDE.md](./.docs/) | 报告编写规范 |

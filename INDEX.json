@@ -1,6 +1,11 @@
 {
-  "last_updated": "2026-03-30 18:56",
+  "last_updated": "2026-04-01 01:49",
   "research_directions": [
+    {
+      "name": "-p",
+      "path": "./-p",
+      "topics": []
+    },
     {
       "name": "Agent协作",
       "path": "./Agent协作",
@@ -15,6 +20,25 @@
               "path": "./Agent协作/实践经验总结/设计实践.md",
               "version": "1.0",
               "date": "26-03"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "JDK",
+      "path": "./JDK",
+      "topics": [
+        {
+          "name": "演进史",
+          "path": "./JDK/演进史",
+          "reports": [
+            {
+              "name": "report_v1.0",
+              "filename": "report_v1.0.md",
+              "path": "./JDK/演进史/report_v1.0.md",
+              "version": "v1.0",
+              "date": "26-04"
             }
           ]
         }

@@ -10,7 +10,8 @@
     "author": {
       "field": "提交者：",
       "values": ["human", "agent"],
-      "description": "提交者标识：区分人类主动编写或 Agent 生成"
+      "description": "提交者标识：区分内容来源",
+      "tip": "human=人类亲自编写的内容，agent=Agent 生成/执行的内容"
     },
     "why": {
       "field": "## Why",

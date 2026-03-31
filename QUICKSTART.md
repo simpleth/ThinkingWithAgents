@@ -1,89 +1,119 @@
 # 技术研究档案库 - 快速开始
 
-## 30 秒上手
+> 5 分钟上手指南
 
+---
+
+## 1. 安装（1 分钟）
+
+安装 Git Hooks，实现提交时自动更新索引：
+
+**Windows（PowerShell）**：
+```powershell
+Copy-Item .scripts\git-pre-commit .git\hooks\pre-commit
+Copy-Item .scripts\git-commit-msg .git\hooks\commit-msg
+```
+
+**Linux / macOS**：
 ```bash
-cd D:\Project\prototype\research
-
-# 安装自动更新（一次即可）
 cp .scripts/git-pre-commit .git/hooks/pre-commit
-chmod +x .git/hooks/pre-commit
+cp .scripts/git-commit-msg .git/hooks/commit-msg
+chmod +x .git/hooks/*
+```
+
+**验证安装**：
+```bash
+git status  # 确认无错误
 ```
 
 ---
 
-## 文档导航
+## 2. 创建你的第一个报告（3 分钟）
 
-| 文档 | 说明 |
-|------|------|
-| 本文档 | 人类快速上手 |
-| [QWEN.md](./QWEN.md) | Agent 初始化（项目上下文） |
-| [.scripts/README.md](./.scripts/) | 脚本工具说明 |
+### 步骤 1：创建目录
+
+```bash
+# Windows
+mkdir "方向名\主题名"
+
+# Linux / macOS
+mkdir -p "方向名/主题名"
+```
+
+**示例**：
+```bash
+mkdir "JDK\演进史"
+```
+
+### 步骤 2：创建报告
+
+复制现有报告的格式，或新建文件：
+
+```bash
+# Windows
+copy "JDK\演进史\template.md" "JDK\演进史\report_v1.0.md"
+
+# Linux / macOS
+cp "JDK/演进史/template.md" "JDK/演进史/report_v1.0.md"
+```
+
+### 步骤 3：编辑内容
+
+报告头部格式：
+
+```markdown
+# 报告标题
+
+> **版本**：v1.0
+> **更新**：2026-04
 
 ---
 
-## 常用场景
+## 概述
 
-### 场景 1：创建新技术方向
-
-```bash
-# 手动创建目录结构
-mkdir -p <方向>/<主题>
-
-# 示例：创建 React 性能优化方向
-mkdir -p "React 性能优化/演进史"
-mkdir -p "React 性能优化/源码分析"
-mkdir -p "React 性能优化/对比评测"
-mkdir -p "React 性能优化/最佳实践"
+...
 ```
 
-### 场景 2：创建报告
+### 步骤 4：提交
 
 ```bash
-# 复制模板并编辑
-cp <方向>/<主题>/template.md <方向>/<主题>/<报告名>.md
-
-# 示例
-cp "前端状态管理/演进史/template.md" "前端状态管理/演进史/report_v1.3.md"
-```
-
-### 场景 3：Git 提交（自动更新索引）
-
-```bash
-# 安装 Hook（仅一次）
-cp .scripts/git-pre-commit .git/hooks/pre-commit
-chmod +x .git/hooks/pre-commit
-
-# 日常提交（索引自动更新）
 git add .
 git commit
 ```
 
----
-
-## 目录结构
-
-```
-research/
-├── QWEN.md                  # Agent 初始化
-├── .scripts/                # 工具脚本
-│   ├── README.md            # 脚本说明
-│   ├── generate_index.py    # 索引生成器
-│   └── git-pre-commit       # Git Hook
-│
-├── 前端状态管理/            # 技术方向
-│   ├── 演进史/report_v1.2.md
-│   └── ...
-│
-├── template.md              # 索引模板
-├── INDEX.json               # 结构化数据
-└── README.md                # 最终索引
-```
+索引会自动更新，无需手动运行脚本。
 
 ---
 
-## 下一步
+## 3. 常用命令速查
 
-1. 查看现有报告学习格式
-2. 开始创建你的第一个报告
-3. 阅读 [QWEN.md](./QWEN.md) 了解项目规范
+| 操作 | 命令 |
+|------|------|
+| 创建技术方向 | `mkdir "<方向>\<主题>"` |
+| 创建报告 | `copy "<方向>\<主题>\template.md" "<报告名>.md"` |
+| 查看变更 | `git status` |
+| 提交 | `git commit` |
+| 查看历史 | `git log --oneline` |
+| 查看某目录历史 | `git log -- <方向>/` |
+
+---
+
+## 4. 深入阅读
+
+| 文档 | 说明 |
+|------|------|
+| [README.md](./README.md) | 项目索引（最终渲染结果） |
+| [QWEN.md](./QWEN.md) | Agent 项目规范 |
+| [.scripts/README.md](./.scripts/) | 脚本工具说明 |
+| [.mygit/README.md](./.mygit/) | Git 提交规范 |
+
+---
+
+## 5. 报告命名规范
+
+| 主题类型 | 命名示例 |
+|----------|----------|
+| 演进史 | `report_v1.0.md` |
+| 源码分析 | `redux 源码解析.md` |
+| 对比评测 | `zustand-vs-jotai.md` |
+| 最佳实践 | `大型应用状态管理实践.md` |

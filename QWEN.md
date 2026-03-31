@@ -77,6 +77,15 @@ research/
 
 > ⚠️ **Agent 提交前必须询问人类确认**
 
+### 安装自动校验（一次即可）
+
+```bash
+cp .scripts/git-commit-msg .git/hooks/commit-msg
+chmod +x .git/hooks/commit-msg
+```
+
+安装后，每次提交会自动验证格式，规则定义在 `.mygit/commit-rules.json`。
+
 ### 提交类型（可组合）
 
 | 类型 | 含义 | 示例 |
@@ -95,6 +104,14 @@ research/
 ```
 
 ### 提交格式
+
+运行以下命令查看完整规范：
+
+```bash
+python .scripts/git-commit-msg --help
+```
+
+模板：
 
 ```
 [类型] 简短描述

@@ -25,3 +25,9 @@ Thumbs.db
 # Git 临时文件
 .mygit/*.tmp
 .mygit/*.msg
+
+# Agent 旧目录（已迁移到 QWEN.md）
+.agent/
+
+# Qwen Code 配置
+.qwen/

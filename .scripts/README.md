@@ -9,19 +9,22 @@
 | 脚本 | 功能 | 触发方式 |
 |------|------|----------|
 | `generate_index.py` | 生成索引 | Git commit 自动 |
-| `git-pre-commit` | Git Hook | Git commit 自动 |
+| `git-pre-commit` | Git Hook (pre-commit) | Git commit 自动 |
+| `git-commit-msg` | Git Hook (commit-msg 校验) | Git commit 自动 |
 
 ---
 
 ## 安装自动触发
 
 ```bash
-# 复制 Hook（一次即可）
+# pre-commit Hook - 自动更新索引
 cp .scripts/git-pre-commit .git/hooks/pre-commit
 chmod +x .git/hooks/pre-commit
-```
 
-安装后，每次 `git commit` 会自动更新索引。
+# commit-msg Hook - 自动校验提交格式
+cp .scripts/git-commit-msg .git/hooks/commit-msg
+chmod +x .git/hooks/commit-msg
+```
 
 ---
 
@@ -37,3 +40,4 @@ python .scripts/generate_index.py
 
 1. 脚本路径从根目录计算：`python .scripts/xxx.py`
 2. Git Hook 仅在 commit 时触发
+3. 校验规则定义在 `.mygit/commit-rules.json`

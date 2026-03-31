@@ -15,6 +15,7 @@ import os
 import json
 from pathlib import Path
 from datetime import datetime
+from urllib.parse import quote
 
 RESEARCH_ROOT = Path(__file__).parent.parent
 INDEX_FILE = RESEARCH_ROOT / "INDEX.json"
@@ -122,7 +123,9 @@ def render_report_links(research_dirs):
             if topic["reports"]:
                 content += f"- **{topic['name']}**:\n"
                 for r in topic["reports"]:
-                    content += f"  - [{r['name']}]({r['path']}) `{r['version']}`\n"
+                    # URL 编码路径，处理空格和特殊字符
+                    encoded_path = quote(r['path'].replace('\\', '/'), safe='/')
+                    content += f"  - [{r['name']}]({encoded_path}) `{r['version']}`\n"
         content += "\n"
     return content
 

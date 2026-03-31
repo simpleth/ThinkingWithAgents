@@ -1,6 +1,6 @@
-# Agent 技能文档
+# 技术研究档案库 - Agent 初始化
 
-> 本文档专为 AI Agent 设计，帮助快速理解项目结构和工作流程
+> Qwen Code 项目初始化文件 - 替代 `.agent/SKILL.md`
 
 ---
 
@@ -16,27 +16,14 @@
 
 ---
 
-## 文档导航
-
-| 文档 | 目标读者 |
-|------|----------|
-| 本文档 | AI Agent |
-| [QUICKSTART.md](../QUICKSTART.md) | 人类快速开始 |
-| [.scripts/README.md](../.scripts/) | 脚本说明 |
-| [.mygit/README.md](../.mygit/) | Git 提交规范 |
-
----
-
 ## 目录结构
 
 ```
 research/
-├── .agent/                  # Agent 专用（本目录）
-│   └── SKILL.md
-│
 ├── .scripts/                # 自动化脚本
 │   ├── README.md
-│   └── generate_index.py    # 核心索引生成器
+│   ├── generate_index.py    # 核心索引生成器
+│   └── git-pre-commit       # Git Hook
 │
 ├── .mygit/                  # Git 规范
 │   ├── README.md            # 提交规范说明
@@ -58,10 +45,10 @@ research/
 
 ```python
 # 跳过目录
-SKIP_DIRS = {"__pycache__", ".git", ".vscode", "node_modules", ".agent", ".scripts", ".mygit"}
+SKIP_DIRS = {"__pycache__", ".git", ".vscode", "node_modules", ".scripts", ".mygit"}
 
 # 跳过文件
-SKIP_FILES = {"template.md"}
+SKIP_FILES = {"template.md", "QWEN.md"}
 
 # 目录结构
 research/
@@ -150,23 +137,10 @@ research/
 ### 新增技术方向
 
 ```bash
-# 1. 创建目录结构
-mkdir -p <方向>/{演进史，源码分析，对比评测，最佳实践}
+# 1. 手动创建目录结构
+mkdir -p <方向>/<主题>
 
-# 2. 为每个主题创建模板
-for topic in 演进史 源码分析 对比评测 最佳实践; do
-    cat > <方向>/$topic/template.md << 'EOF'
-# <报告标题>
-> **版本**：v1.0  
-> **更新**：YYYY-MM
----
-## 概述
----
-## 正文
----
-## 总结
-EOF
-done
+# 2. 创建报告模板（复制现有 template.md 或新建）
 
 # 3. 触发索引更新
 python .scripts/generate_index.py
@@ -177,7 +151,7 @@ python .scripts/generate_index.py
 ### 新增报告
 
 ```bash
-# 1. 复制模板
+# 1. 新建或复制模板
 cp <方向>/<主题>/template.md <方向>/<主题>/<报告名>.md
 
 # 2. 编辑内容（确保包含版本和更新日期）
@@ -253,5 +227,5 @@ git log --grep="\[feat\]" --oneline
 ## 重要提醒
 
 > ⚠️ **Agent 每次提交前必须询问人类**
-> 
+>
 > 即使改动很小，也要确认后再执行 `git commit`

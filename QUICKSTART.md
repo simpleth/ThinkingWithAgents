@@ -5,9 +5,6 @@
 ```bash
 cd D:\Project\prototype\research
 
-# 创建报告（自动更新索引）
-python .scripts/create_report.py 前端状态管理 演进史 report_v1.3
-
 # 安装自动更新（一次即可）
 cp .scripts/git-pre-commit .git/hooks/pre-commit
 chmod +x .git/hooks/pre-commit
@@ -20,7 +17,7 @@ chmod +x .git/hooks/pre-commit
 | 文档 | 说明 |
 |------|------|
 | 本文档 | 人类快速上手 |
-| [.agent/SKILL.md](./.agent/) | AI Agent 技能文档 |
+| [QWEN.md](./QWEN.md) | Agent 初始化（项目上下文） |
 | [.scripts/README.md](./.scripts/) | 脚本工具说明 |
 
 ---
@@ -30,35 +27,27 @@ chmod +x .git/hooks/pre-commit
 ### 场景 1：创建新技术方向
 
 ```bash
-python .scripts/create_direction.py React 性能优化
-```
+# 手动创建目录结构
+mkdir -p <方向>/<主题>
 
-自动创建 4 个标准主题：演进史、源码分析、对比评测、最佳实践。
+# 示例：创建 React 性能优化方向
+mkdir -p "React 性能优化/演进史"
+mkdir -p "React 性能优化/源码分析"
+mkdir -p "React 性能优化/对比评测"
+mkdir -p "React 性能优化/最佳实践"
+```
 
 ### 场景 2：创建报告
 
 ```bash
-# 演进史报告
-python .scripts/create_report.py 前端状态管理 演进史 report_v1.3
+# 复制模板并编辑
+cp <方向>/<主题>/template.md <方向>/<主题>/<报告名>.md
 
-# 源码分析
-python .scripts/create_report.py 前端状态管理 源码分析 redux 源码解析
-
-# 对比评测
-python .scripts/create_report.py 前端状态管理 对比评测 zustand-vs-jotai
+# 示例
+cp "前端状态管理/演进史/template.md" "前端状态管理/演进史/report_v1.3.md"
 ```
 
-### 场景 3：更新报告
-
-```bash
-# 编辑报告后，更新版本号（自动递增）
-python .scripts/bump_version.py 前端状态管理/演进史/report_v1.2.md
-
-# 或指定新版本
-python .scripts/bump_version.py 前端状态管理/演进史/report_v1.2.md v2.0
-```
-
-### 场景 4：Git 提交（自动更新索引）
+### 场景 3：Git 提交（自动更新索引）
 
 ```bash
 # 安装 Hook（仅一次）
@@ -67,19 +56,8 @@ chmod +x .git/hooks/pre-commit
 
 # 日常提交（索引自动更新）
 git add .
-git commit -m "add: 前端状态管理/演进史 report_v1.3"
+git commit
 ```
-
----
-
-## 工具速查
-
-| 命令 | 功能 |
-|------|------|
-| `python .scripts/create_direction.py <名>` | 创建技术方向 |
-| `python .scripts/create_report.py <方向> <主题> <名>` | 创建报告 |
-| `python .scripts/bump_version.py <路径>` | 更新版本 |
-| `python .scripts/generate_index.py` | 生成索引 |
 
 ---
 
@@ -87,14 +65,11 @@ git commit -m "add: 前端状态管理/演进史 report_v1.3"
 
 ```
 research/
-├── .agent/                  # Agent 文档
+├── QWEN.md                  # Agent 初始化
 ├── .scripts/                # 工具脚本
 │   ├── README.md            # 脚本说明
-│   ├── generate_index.py
-│   ├── create_direction.py
-│   ├── create_report.py
-│   ├── bump_version.py
-│   └── git-pre-commit
+│   ├── generate_index.py    # 索引生成器
+│   └── git-pre-commit       # Git Hook
 │
 ├── 前端状态管理/            # 技术方向
 │   ├── 演进史/report_v1.2.md
@@ -111,4 +86,4 @@ research/
 
 1. 查看现有报告学习格式
 2. 开始创建你的第一个报告
-3. 阅读 [.scripts/README.md](./.scripts/) 了解脚本
+3. 阅读 [QWEN.md](./QWEN.md) 了解项目规范

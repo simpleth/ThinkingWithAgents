@@ -93,7 +93,7 @@ chmod +x .git/hooks/pre-commit
 |------|------|
 | [QUICKSTART.md](./QUICKSTART.md) | 人类快速开始 |
 | [.scripts/README.md](./.scripts/) | 脚本工具说明 |
-| [.agent/SKILL.md](./.agent/) | Agent 技能文档 |
+| [QWEN.md](./QWEN.md) | Agent 初始化（项目上下文） |
 
 ---
 

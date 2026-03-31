@@ -100,12 +100,7 @@ git commit
 
 ## 4. 深入阅读
 
-| 文档 | 说明 |
-|------|------|
-| [README.md](./README.md) | 项目索引（最终渲染结果） |
-| [QWEN.md](./QWEN.md) | Agent 项目规范 |
-| [.scripts/README.md](./.scripts/) | 脚本工具说明 |
-| [.mygit/README.md](./.mygit/) | Git 提交规范 |
+详见 [DOCS.md](./DOCS.md) 获取完整文档导航。
 
 ---
 

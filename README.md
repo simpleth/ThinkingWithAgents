@@ -2,7 +2,7 @@
 
 > 本索引由脚本自动生成，请勿手动编辑
 >
-> 最后更新：2026-04-01 02:03
+> 最后更新：2026-04-01 02:11
 >
 > 数据源：[INDEX.json](./INDEX.json)
 
@@ -96,11 +96,7 @@ chmod +x .git/hooks/pre-commit
 
 ## 文档
 
-| 文档 | 说明 |
-|------|------|
-| [QUICKSTART.md](./QUICKSTART.md) | 人类快速开始 |
-| [.scripts/README.md](./.scripts/) | 脚本工具说明 |
-| [.agent/SKILL.md](./.agent/) | Agent 技能文档 |
+详见 [DOCS.md](./DOCS.md)。
 
 ---
 

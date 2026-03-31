@@ -56,11 +56,7 @@ chmod +x .git/hooks/pre-commit
 
 ## 文档
 
-| 文档 | 说明 |
-|------|------|
-| [QUICKSTART.md](./QUICKSTART.md) | 人类快速开始 |
-| [.scripts/README.md](./.scripts/) | 脚本工具说明 |
-| [.agent/SKILL.md](./.agent/) | Agent 技能文档 |
+详见 [DOCS.md](./DOCS.md)。
 
 ---
 

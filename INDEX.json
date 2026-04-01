@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-02 00:32",
+  "last_updated": "2026-04-02 00:53",
   "research_directions": [
     {
       "name": "Agent",
@@ -53,6 +53,25 @@
               "filename": "report_v1.0.md",
               "path": "./JDK/演进史/report_v1.0.md",
               "version": "v1.0",
+              "date": "26-04"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "OpenClaw",
+      "path": "./OpenClaw",
+      "topics": [
+        {
+          "name": "架构分析",
+          "path": "./OpenClaw/架构分析",
+          "reports": [
+            {
+              "name": "OpenClaw 核心架构深度解析",
+              "filename": "OpenClaw 核心架构深度解析.md",
+              "path": "./OpenClaw/架构分析/OpenClaw 核心架构深度解析.md",
+              "version": "1.0",
               "date": "26-04"
             }
           ]

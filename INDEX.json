@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-02 00:53",
+  "last_updated": "2026-04-26 23:19",
   "research_directions": [
     {
       "name": "Agent",
@@ -92,6 +92,25 @@
               "path": "./前端状态管理/演进史/report_v1.2.md",
               "version": "v1.2",
               "date": "26-03"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "对话结构",
+      "path": "./对话结构",
+      "topics": [
+        {
+          "name": "研究报告",
+          "path": "./对话结构/研究报告",
+          "reports": [
+            {
+              "name": "对话结构研究报告",
+              "filename": "对话结构研究报告.md",
+              "path": "./对话结构/研究报告/对话结构研究报告.md",
+              "version": "1.0",
+              "date": "26-04"
             }
           ]
         }

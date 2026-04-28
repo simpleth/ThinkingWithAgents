@@ -7,6 +7,7 @@
 | [QUICKSTART.md](./QUICKSTART.md) | 快速入门 - 项目概览、核心功能、5 分钟上手 |
 | [AGENTS.md](./AGENTS.md) | 项目宪法 - 原则与规则：6 大价值观、Agent 协作经验、强制约束 |
 | [README.md](./README.md) | 项目索引 - 研究方向与报告目录，由脚本自动生成 |
+| [DEVELOPER.md](./DEVELOPER.md) | 开发者文档 - 项目架构、内部机制和维护指南 |
 | [.docs/README.md](./.docs/) | 文档规范目录 - 项目文档和教程的统一管理 |
 | [.readme/README.md](./.readme/) | README 生成器 - 模板、数据、图表生成说明 |
 | [.mygit/README.md](./.mygit/) | 提交规范 - 提交信息格式、commit-msg 校验规则 |

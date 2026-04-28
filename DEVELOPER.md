@@ -1,90 +1,131 @@
 # 开发者文档
 
-> 项目架构、内部机制和维护指南
+> 项目设计理念、实践案例与维护指南
 
 ---
 
-## 项目架构
+## 一、核心理念（这才是项目的核心）
 
-### 目录结构
+### 1.1 为什么这样设计？
 
-```
-research/
-├── .agent/              # Agent 工具库
-├── .docs/               # 文档规范
-├── .init/               # 初始化脚本
-├── .mygit/              # Git 相关
-├── .readme/             # README 生成器
-├── [研究方向]/          # 研究内容（如 Agent/、JDK/ 等）
-│   └── [研究主题]/      # 研究主题
-│       └── [报告].md   # 研究报告
-└── [核心文档].md       # QUICKSTART.md、AGENTS.md 等
-```
+我们的痛点：
+- Agent 很难理解项目结构，每次都要重新解释
+- 知识沉淀后，索引更新很麻烦
+
+所以核心目标是：让 Agent 能快速理解项目，让人和 Agent 协作更高效。
+
+为了实现这个目标，我们总结出四个理念：
 
 ---
 
-## 内部机制
+### 1.2 四个核心理念
 
-### 1. Git Hooks
+**理念 1：单一来源原则**
+- 信息只在一处维护，避免重复和不一致
+- 体现：README 由脚本生成、提交规范只在 `commit-rules.json` 定义
 
-**位置**：`.mygit/hooks/`
+**理念 2：目录即数据**
+- 目录结构本身就表达信息
+- 体现：研究方向/研究主题/报告 三层结构，功能模块用 `.xxx` 开头
 
-**Hooks 列表**：
-- `pre-commit`：提交前自动更新 README 索引
-- `commit-msg`：提交信息格式校验
+**理念 3：Agent 优先设计**
+- 设计时先考虑 Agent 好不好理解
+- 体现：统一文档入口 DOCS.md、每个模块都有 README.md
 
-**安装**：
-```bash
-./.init/install-all.sh
-```
-
-### 2. 自动索引
-
-**位置**：`.readme/`
-
-**核心组件**：
-- `generate_index.py`：扫描目录结构，生成 index.json 和 README.md
-- `update-index.sh`：Git hook 调用的包装脚本
-- `index.json`：结构化索引数据
-- `template.md`：README 模板
-
-**流程**：
-1. Git 提交时触发 pre-commit hook
-2. 调用 update-index.sh
-3. 运行 generate_index.py
-4. 扫描所有研究报告
-5. 自动更新 README.md 和 index.json
-
-### 3. Agent 工具
-
-**位置**：`.agent/`
-
-**工具列表**：
-- `tools.py`：封装常用操作（创建目录、Git 操作等）
+**理念 4：自动化优先**
+- 能自动的就不手动，让人和 Agent 专注内容
+- 体现：Git 提交时自动更新 README、提交信息自动校验
 
 ---
 
-## 维护指南
+### 1.3 理念如何协作，达到什么效果？
 
-### 添加新的功能模块
+这四个理念不是孤立的，它们互相配合：
+
+1. **目录即数据** → 提供结构化的基础
+2. **Agent 优先设计** → 在这个基础上，让 Agent 容易理解
+3. **单一来源原则** → 保证信息一致，Agent 不困惑
+4. **自动化优先** → 让流程顺畅，减少手动操作
+
+**最终效果：**
+- Agent 第一次接触项目时，能快速理解结构
+- 知识沉淀时，自动更新索引，不费劲
+- 人和 Agent 能专注内容，不用操心流程
+
+---
+
+## 二、重要功能与实践
+
+（这些功能都是理念的具体实践）
+
+### 2.1 自动索引功能
+
+**体现的理念：** 单一来源、自动化优先
+
+**解决的问题：** 手动更新 README 太麻烦，Agent 不知道什么时候要更新
+
+**工作流程：**
+```
+git commit → pre-commit hook → generate_index.py → 扫描目录 → 生成 index.json → 填充 README → 自动提交
+```
+
+**关键文件：**
+- `.readme/generate_index.py`：主逻辑
+- `.readme/index.json`：索引数据
+- `.readme/template.md`：模板
+
+---
+
+### 2.2 Git 提交流程
+
+**体现的理念：** 单一来源、Git 原生
+
+**解决的问题：** 提交信息格式不统一，历史难读，Agent 不理解
+
+**工作流程：**
+```
+写提交信息 → commit-msg hook → 按 commit-rules.json 校验 → 通过/不通过
+```
+
+**关键文件：**
+- `.mygit/hooks/commit-msg`：校验逻辑
+- `.mygit/hooks/pre-commit`：调用自动索引
+- `.mygit/commit-rules.json`：规范定义
+- `.init/install-all.sh`：安装 hooks
+
+---
+
+### 2.3 功能模块组织方式
+
+**体现的理念：** Agent 优先、目录即数据
+
+**解决的问题：** Agent 分不清功能模块和研究内容
+
+**设计要点：**
+- 功能模块都用 `.xxx` 开头
+- 每个模块都有 README.md
+- 模块之间保持独立
+
+---
+
+## 三、如何延续这种设计
+
+### 3.1 添加新的功能模块
 
 1. 创建新的 `.xxx/` 目录
-2. 添加 README.md
-3. 更新 DOCS.md 索引
+2. 添加 README.md，讲清楚模块功能
+3. 更新 DOCS.md
 
-### 修改提交规范
+### 3.2 修改现有功能
 
-编辑 `.mygit/commit-rules.json`
+1. 先理解这个功能体现了哪些理念
+2. 修改时保持理念的延续性
+3. 保持幂等性（重复运行结果一致）
+4. 改完测试一下
 
-### 更新 README 生成逻辑
+### 3.3 给 Agent 的建议
 
-修改 `.readme/generate_index.py`
-
----
-
-## 相关文档
-
-- [AGENTS.md](./AGENTS.md)：项目理念和原则
-- [.mygit/README.md](./.mygit/README.md)：Git 提交规范
-- [.readme/README.md](./.readme/README.md)：README 生成器说明
-- [.agent/README.md](./.agent/README.md)：Agent 工具库说明
+- 先读"核心理念"，这是项目的根
+- 看"重要功能"时，思考它体现了哪些理念
+- 做修改前，先确认会不会破坏现有理念
+- 有疑问时，看 AGENTS.md 里的协作原则

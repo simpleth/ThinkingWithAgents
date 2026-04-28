@@ -1,16 +1,13 @@
 # 文档导航
 
-> 项目关键文档索引，由 INDEX.json 脚本统一生成，请勿手动编辑
-
 ---
 
 | 文档 | 说明 |
 |------|------|
 | [QUICKSTART.md](./QUICKSTART.md) | 工作流指引 - 5 分钟上手：安装 Hooks、创建报告、提交变更 |
-| [QWEN.md](./QWEN.md) | 项目宪法 - 原则与规则：6 大价值观、Agent 协作经验、强制约束 |
+| [AGENTS.md](./AGENTS.md) | 项目宪法 - 原则与规则：6 大价值观、Agent 协作经验、强制约束 |
 | [README.md](./README.md) | 项目索引 - 研究方向与报告目录，由脚本自动生成 |
 | [.docs/REPORT_GUIDE.md](./.docs/REPORT_GUIDE.md) | 报告规范 - 结构模板、版本更新规则、文件命名规范 |
-| [.scripts/README.md](./.scripts/) | 脚本说明 - Git Hooks (commit-msg 校验) 脚本位置 |
 | [.readme/README.md](./.readme/) | README 生成器 - 模板、数据、图表生成说明 |
 | [.mygit/README.md](./.mygit/) | 提交规范 - 提交信息格式、commit-msg 校验规则 |
 | [.agent/README.md](./.agent/) | 工具库 - Agent 可用工具列表、调用示例 |

@@ -8,7 +8,7 @@
   {{report_links}}     - 报告链接列表
 
 用法：
-  python .scripts/generate_index.py
+  python .readme/generate_index.py
 """
 
 import os

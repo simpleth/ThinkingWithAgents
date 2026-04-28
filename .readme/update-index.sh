@@ -1,12 +1,11 @@
 #!/bin/bash
-# Git pre-commit hook: 自动更新 README 索引
-# 安装：cp .scripts/git-pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+# README 索引更新脚本
+# 由 pre-commit hook 调用
 
-GIT_DIR=$(git rev-parse --git-dir)
-PROJECT_ROOT="$(cd "$GIT_DIR/.." && pwd)"
+PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
 echo "Update README index..."
-python "$PROJECT_ROOT/.scripts/generate_index.py"
+python "$PROJECT_ROOT/.readme/generate_index.py"
 
 if ! git diff --quiet --exit-code -- .readme/index.json .readme/stats_history.json .readme/stats_chart.png README.md 2>/dev/null; then
     echo "Add index files..."

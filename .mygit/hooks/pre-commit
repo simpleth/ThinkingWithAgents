@@ -1,0 +1,11 @@
+#!/bin/bash
+# Git pre-commit hook: 调用各模块脚本
+# 安装：cp .mygit/hooks/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+
+GIT_DIR=$(git rev-parse --git-dir)
+PROJECT_ROOT="$(cd "$GIT_DIR/.." && pwd)"
+
+# 调用 README 索引更新
+if [ -f "$PROJECT_ROOT/.readme/update-index.sh" ]; then
+    bash "$PROJECT_ROOT/.readme/update-index.sh"
+fi

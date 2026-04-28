@@ -34,30 +34,30 @@ def show_help(rules):
     print("Git 提交规范说明")
     print("=" * 60)
     print()
-    print("📋 提交格式模板：")
+    print("[x] 提交格式模板：")
     print("-" * 40)
     print(rules['template'])
     print()
-    print("📝 字段说明：")
+    print("[=] 字段说明：")
     print("-" * 40)
     for field_name, field_info in rules['fields'].items():
         desc = field_info.get('description', '')
         tip = field_info.get('tip', '')
         example = field_info.get('example', '')
-        print(f"\n【{field_name}】{desc}")
+        print(f"\n[{field_name}]{desc}")
         if 'values' in field_info:
             print(f"  可选值：{', '.join(field_info['values'])}")
         if example:
             print(f"  示例：{example}")
         if tip:
-            print(f"  💡 {tip}")
+            print(f"  -> {tip}")
     print()
-    print("🏷️  提交类型：")
+    print("[T] 提交类型：")
     print("-" * 40)
     for type_name, type_desc in rules['types'].items():
         print(f"  {type_name:10} - {type_desc}")
     print()
-    print("📌 规则：")
+    print("[!] 规则：")
     print("-" * 40)
     for rule_name, rule_desc in rules['rules'].items():
         print(f"  {rule_desc}")
@@ -68,16 +68,14 @@ def validate_commit_msg(content, rules):
     errors = []
     lines = content.strip().split('\n')
     first_line = lines[0] if lines else ''
-    
-    # 验证第一行格式
+
     pattern_rule = rules['fields'].get('first_line', {})
     if pattern_rule:
         pattern = pattern_rule['pattern']
         if not re.match(pattern, first_line):
             errors.append(f"第一行格式错误：{first_line}")
             errors.append(f"  应为：[类型] 简短描述")
-    
-    # 验证必填字段
+
     for field_name, field_rule in rules['fields'].items():
         if field_name in ['first_line']:
             continue
@@ -90,46 +88,44 @@ def validate_commit_msg(content, rules):
             match = re.search(rf'{re.escape(field)}\s*([a-z]+)', content)
             if not match or match.group(1) not in field_rule['values']:
                 errors.append(f"字段值错误：{field} 必须是 {', '.join(field_rule['values'])}")
-    
+
     return errors
 
 def main():
-    # 帮助模式
     if len(sys.argv) > 1 and sys.argv[1] in ['--help', '-h', 'help']:
         rules = load_rules()
         if rules:
             show_help(rules)
         else:
-            print("❌ 未找到规则文件 .mygit/commit-rules.json")
+            print("[-] 未找到规则文件 .mygit/commit-rules.json")
         sys.exit(0)
-    
-    # 校验模式
+
     if len(sys.argv) < 2:
-        print('❌ 用法：git-commit-msg <commit-msg-file>')
-        print('   或：git-commit-msg --help  查看规范说明')
+        print("[-] 用法：git-commit-msg <commit-msg-file>")
+        print("    或：git-commit-msg --help  查看规范说明")
         sys.exit(1)
-    
+
     commit_msg_file = sys.argv[1]
-    
+
     with open(commit_msg_file, 'r', encoding='utf-8') as f:
         content = f.read()
-    
+
     rules = load_rules()
     if not rules:
-        print('⚠️  未找到规则文件，跳过校验')
+        print("[!] 未找到规则文件，跳过校验")
         sys.exit(0)
-    
+
     errors = validate_commit_msg(content, rules)
-    
+
     if errors:
-        print('\n❌ 提交信息格式验证失败\n')
+        print('\n[X] 提交信息格式验证失败\n')
         print('错误列表：')
         for i, error in enumerate(errors, 1):
             print(f'  {i}. {error}')
-        print(f'\n💡 查看完整规范：python .scripts/git-commit-msg --help')
+        print(f'\n[?] 查看完整规范：python .scripts/git-commit-msg --help')
         sys.exit(1)
-    
-    print('✓ 提交信息格式验证通过')
+
+    print('[OK] 提交信息格式验证通过')
     sys.exit(0)
 
 if __name__ == '__main__':

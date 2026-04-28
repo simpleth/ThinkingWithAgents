@@ -4,7 +4,13 @@
 >
 > 最后更新：{{last_updated}}
 >
-> 数据源：[INDEX.json](./INDEX.json)
+> 数据源：[index.json](./.readme/index.json)
+
+---
+
+## 统计概览
+
+{{stats_chart}}
 
 ---
 

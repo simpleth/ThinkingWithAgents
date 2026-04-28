@@ -11,6 +11,7 @@
 | [README.md](./README.md) | 项目索引 - 研究方向与报告目录，由脚本自动生成 |
 | [.docs/REPORT_GUIDE.md](./.docs/REPORT_GUIDE.md) | 报告规范 - 结构模板、版本更新规则、文件命名规范 |
 | [.scripts/README.md](./.scripts/) | 脚本说明 - Git Hooks 原理、索引生成脚本、手动运行方法 |
+| [.readme/README.md](./.readme/) | README 生成器 - 模板、数据、图表生成说明 |
 | [.mygit/README.md](./.mygit/) | 提交规范 - 提交信息格式、commit-msg 校验规则 |
 | [.agent/README.md](./.agent/) | 工具库 - Agent 可用工具列表、调用示例 |
 

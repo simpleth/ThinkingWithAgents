@@ -2,9 +2,16 @@
 
 > 本索引由脚本自动生成，请勿手动编辑
 >
-> 最后更新：2026-04-29 00:12
+> 最后更新：2026-04-29 01:18
 >
-> 数据源：[INDEX.json](./INDEX.json)
+> 数据源：[index.json](./.readme/index.json)
+
+---
+
+## 统计概览
+
+![统计图表](./.readme/stats_chart.png)
+
 
 ---
 

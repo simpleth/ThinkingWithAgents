@@ -5,10 +5,10 @@
 GIT_DIR=$(git rev-parse --git-dir)
 PROJECT_ROOT="$(cd "$GIT_DIR/.." && pwd)"
 
-echo "🔄 更新 README 索引..."
+echo "Update README index..."
 python "$PROJECT_ROOT/.scripts/generate_index.py"
 
 if ! git diff --quiet --exit-code -- .readme/index.json .readme/stats_history.json .readme/stats_chart.png README.md 2>/dev/null; then
-    echo "📦 添加生成的索引文件..."
+    echo "Add index files..."
     git add .readme/index.json .readme/stats_history.json .readme/stats_chart.png README.md
 fi

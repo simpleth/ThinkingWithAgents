@@ -181,13 +181,43 @@
   padding: var(--spacing-md);
 }
 
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--border);
+}
+
 .sidebar-title {
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--text-primary);
-  margin-bottom: var(--spacing-md);
-  padding-bottom: var(--spacing-sm);
-  border-bottom: 1px solid var(--border);
+  margin: 0;
+}
+
+.sidebar-controls {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.control-btn {
+  background: transparent;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.control-btn:hover {
+  background: var(--bg-secondary);
+  color: var(--accent);
 }
 
 .categories-nav {

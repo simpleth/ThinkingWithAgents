@@ -61,6 +61,48 @@ function Header({ categories, articles, isSidebarOpen, onToggleSidebar }) {
     setExpandedTopics(newSet)
   }
 
+  const expandAll = () => {
+    const allCats = new Set(categories.map(c => c.id))
+    const allTopics = new Set()
+    Object.entries(tree).forEach(([catId, catData]) => {
+      Object.keys(catData.topics).forEach(topicName => {
+        allTopics.add(`${catId}-${topicName}`)
+      })
+    })
+    setExpandedCategories(allCats)
+    setExpandedTopics(allTopics)
+  }
+
+  const collapseAll = () => {
+    setExpandedCategories(new Set())
+    setExpandedTopics(new Set())
+  }
+
+  const handleCategoryDoubleClick = (catId, e) => {
+    e.stopPropagation()
+    const catData = tree[catId]
+    
+    const allTopicsForCat = Object.keys(catData?.topics || []).map(topicName => `${catId}-${topicName}`)
+    const allTopicsForCatSet = new Set(allTopicsForCat)
+    
+    const hasAllExpanded = expandedCategories.has(catId) && 
+      allTopicsForCat.every(key => expandedTopics.has(key))
+    
+    const newExpandedCats = new Set(expandedCategories)
+    const newExpandedTopics = new Set(expandedTopics)
+    
+    if (hasAllExpanded) {
+      newExpandedCats.delete(catId)
+      allTopicsForCat.forEach(key => newExpandedTopics.delete(key))
+    } else {
+      newExpandedCats.add(catId)
+      allTopicsForCat.forEach(key => newExpandedTopics.add(key))
+    }
+    
+    setExpandedCategories(newExpandedCats)
+    setExpandedTopics(newExpandedTopics)
+  }
+
   const handleSearch = (e) => {
     e.preventDefault()
     if (query.trim()) {
@@ -124,7 +166,17 @@ function Header({ categories, articles, isSidebarOpen, onToggleSidebar }) {
 
       <aside className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-content">
-          <div className="sidebar-title">知识库目录</div>
+          <div className="sidebar-header">
+            <div className="sidebar-title">知识库目录</div>
+            <div className="sidebar-controls">
+              <button className="control-btn" onClick={expandAll} title="全部展开">
+                ➕
+              </button>
+              <button className="control-btn" onClick={collapseAll} title="全部折叠">
+                ➖
+              </button>
+            </div>
+          </div>
           
           <div className="sidebar-search">
             <form className="search-form" onSubmit={handleSearch}>
@@ -149,6 +201,7 @@ function Header({ categories, articles, isSidebarOpen, onToggleSidebar }) {
                   <div 
                     className={`category-link tree-node ${isExpanded ? 'expanded' : ''}`}
                     onClick={() => toggleCategory(cat.id)}
+                    onDoubleClick={(e) => handleCategoryDoubleClick(cat.id, e)}
                   >
                     <span className="tree-arrow">
                       {isExpanded ? '▼' : '▶'}

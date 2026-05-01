@@ -17,7 +17,26 @@ function Article({ articles, categories }) {
   const category = article ? categories.find(c => c.id === article.category) : null
   const relatedArticles = article ? articles.filter(a => a.category === article.category && a.id !== articleId).slice(0, CONFIG.ARTICLE.RELATED_ARTICLES_COUNT) : []
 
-  // 解析 Markdown 标题
+  useEffect(() => {
+    window.scrollTo(0, 0)
+    setLoading(true)
+    setHeadings([])
+    setCurrentHeadingIndex(-1)
+
+    if (article) {
+      fetch(article.path)
+        .then(res => res.text())
+        .then(text => {
+          setContent(text)
+          setLoading(false)
+        })
+        .catch(() => {
+          setContent('# 无法加载文档内容\n\n请检查文档路径是否正确。')
+          setLoading(false)
+        })
+    }
+  }, [articleId, article])
+
   useEffect(() => {
     if (content) {
       const lines = content.split('\n')
@@ -36,12 +55,14 @@ function Article({ articles, categories }) {
     }
   }, [content])
 
-  // 滚动监听，高亮当前标题
   useEffect(() => {
-    const handleScroll = () => {
-      if (headings.length === 0) return
-      
-      const scrollPosition = window.scrollY + 100
+    if (headings.length === 0) return
+
+    let scrollTimeout = null
+
+    const updateHighlight = () => {
+      const headerHeight = 70
+      const scrollPosition = window.scrollY + headerHeight + 50
       let newIndex = -1
 
       for (let i = headings.length - 1; i >= 0; i--) {
@@ -55,20 +76,37 @@ function Article({ articles, categories }) {
       setCurrentHeadingIndex(newIndex)
     }
 
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    const handleScroll = () => {
+      if (scrollTimeout) {
+        clearTimeout(scrollTimeout)
+      }
+      scrollTimeout = setTimeout(updateHighlight, 150)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    updateHighlight()
+
+    return () => {
+      if (scrollTimeout) {
+        clearTimeout(scrollTimeout)
+      }
+      window.removeEventListener('scroll', handleScroll)
+    }
   }, [headings])
 
-  // 滚动到指定标题
   const handleHeadingClick = (id) => {
     const element = document.getElementById(id)
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      const headerHeight = 70
+      const elementPosition = element.offsetTop - headerHeight - 20
+      window.scrollTo({
+        top: elementPosition,
+        behavior: 'smooth'
+      })
     }
     setIsMobileTocOpen(false)
   }
 
-  // 自定义渲染组件，给标题添加 id
   const renderers = {
     h1: ({ children, ...props }) => {
       const index = headings.findIndex(h => h.text === children && h.level === 1)
@@ -92,24 +130,6 @@ function Article({ articles, categories }) {
     }
   }
 
-  useEffect(() => {
-    window.scrollTo(0, 0)
-    setLoading(true)
-
-    if (article) {
-      fetch(article.path)
-        .then(res => res.text())
-        .then(text => {
-          setContent(text)
-          setLoading(false)
-        })
-        .catch(() => {
-          setContent('# 无法加载文档内容\n\n请检查文档路径是否正确。')
-          setLoading(false)
-        })
-    }
-  }, [articleId, article])
-
   if (!article) {
     return (
       <div className="article-not-found">
@@ -121,18 +141,6 @@ function Article({ articles, categories }) {
 
   return (
     <div className="article-page">
-      <header className="article-header">
-        <nav className="article-breadcrumb">
-          <Link to="/" className="breadcrumb-link">首页</Link>
-          <span className="breadcrumb-separator">/</span>
-          <Link to={`/category/${article.category}`} className="breadcrumb-link">
-            <span style={{ color: category?.color }}>{category?.icon}</span>
-            <span>{category?.name}</span>
-          </Link>
-        </nav>
-      </header>
-
-      {/* 移动端目录按钮 */}
       {headings.length > 0 && (
         <button
           className="mobile-toc-btn"
@@ -142,7 +150,6 @@ function Article({ articles, categories }) {
         </button>
       )}
 
-      {/* 移动端目录面板 */}
       {isMobileTocOpen && (
         <div className="mobile-toc-overlay" onClick={() => setIsMobileTocOpen(false)}>
           <div className="mobile-toc-panel" onClick={(e) => e.stopPropagation()}>
@@ -184,9 +191,23 @@ function Article({ articles, categories }) {
           )}
         </div>
 
-        {headings.length > 0 && (
-          <aside className="article-toc">
-            <div className="toc-title">目录</div>
+        <aside className="article-toc">
+          <div className="toc-fixed-header">
+            <nav className="article-breadcrumb">
+              <Link to="/" className="breadcrumb-link">首页</Link>
+              <span className="breadcrumb-separator">/</span>
+              <Link to={`/category/${article.category}`} className="breadcrumb-link">
+                <span style={{ color: category?.color }}>{category?.icon}</span>
+                <span>{category?.name}</span>
+              </Link>
+            </nav>
+
+            {headings.length > 0 && (
+              <div className="toc-title">目录</div>
+            )}
+          </div>
+
+          {headings.length > 0 && (
             <nav className="toc-nav">
               {headings.map((heading, index) => (
                 <button
@@ -198,8 +219,8 @@ function Article({ articles, categories }) {
                 </button>
               ))}
             </nav>
-          </aside>
-        )}
+          )}
+        </aside>
       </div>
     </div>
   )

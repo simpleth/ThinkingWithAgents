@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import './Header.css'
 import { CONFIG } from '../config'
+import { debugHeader } from '../utils/debug'
 
 function buildTree(categories, articles) {
   const tree = {}
+  debugHeader.debug('Building navigation tree...')
   
   categories.forEach(cat => {
     tree[cat.id] = {
@@ -26,10 +28,16 @@ function buildTree(categories, articles) {
     }
   })
   
+  debugHeader.log('Navigation tree built:', {
+    categories: Object.keys(tree).length,
+    topics: Object.values(tree).reduce((sum, c) => sum + Object.keys(c.topics).length, 0),
+    totalArticles: articles.length
+  })
   return tree
 }
 
 function Header({ categories, articles, isSidebarOpen, onToggleSidebar }) {
+  debugHeader.debug('Header component rendering')
   const [query, setQuery] = useState('')
   const [isMobile, setIsMobile] = useState(false)
   const [expandedCategories, setExpandedCategories] = useState(new Set())
@@ -41,6 +49,9 @@ function Header({ categories, articles, isSidebarOpen, onToggleSidebar }) {
 
   const toggleCategory = (catId) => {
     const newSet = new Set(expandedCategories)
+    const isExpanding = !newSet.has(catId)
+    debugHeader.debug('Toggle category:', { catId, isExpanding })
+    
     if (newSet.has(catId)) {
       newSet.delete(catId)
     } else {
@@ -53,6 +64,9 @@ function Header({ categories, articles, isSidebarOpen, onToggleSidebar }) {
     e.stopPropagation()
     const key = `${catId}-${topicName}`
     const newSet = new Set(expandedTopics)
+    const isExpanding = !newSet.has(key)
+    debugHeader.debug('Toggle topic:', { catId, topicName, isExpanding })
+    
     if (newSet.has(key)) {
       newSet.delete(key)
     } else {
@@ -62,6 +76,7 @@ function Header({ categories, articles, isSidebarOpen, onToggleSidebar }) {
   }
 
   const expandAll = () => {
+    debugHeader.log('Expand all categories/topics clicked')
     const allCats = new Set(categories.map(c => c.id))
     const allTopics = new Set()
     Object.entries(tree).forEach(([catId, catData]) => {
@@ -74,12 +89,14 @@ function Header({ categories, articles, isSidebarOpen, onToggleSidebar }) {
   }
 
   const collapseAll = () => {
+    debugHeader.log('Collapse all categories/topics clicked')
     setExpandedCategories(new Set())
     setExpandedTopics(new Set())
   }
 
   const handleCategoryDoubleClick = (catId, e) => {
     e.stopPropagation()
+    debugHeader.debug('Category double-clicked:', { catId })
     const catData = tree[catId]
     
     const allTopicsForCat = Object.keys(catData?.topics || []).map(topicName => `${catId}-${topicName}`)
@@ -106,6 +123,7 @@ function Header({ categories, articles, isSidebarOpen, onToggleSidebar }) {
   const handleSearch = (e) => {
     e.preventDefault()
     if (query.trim()) {
+      debugHeader.log('Search submitted:', { query: query.trim() })
       navigate(`/search?q=${encodeURIComponent(query.trim())}`)
       setQuery('')
     }
@@ -113,25 +131,32 @@ function Header({ categories, articles, isSidebarOpen, onToggleSidebar }) {
 
   const handleArticleClick = () => {
     if (isMobile) {
+      debugHeader.debug('Article clicked on mobile, closing sidebar')
       onToggleSidebar()
     }
   }
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth <= CONFIG.HEADER.MOBILE_BREAKPOINT)
+      const newIsMobile = window.innerWidth <= CONFIG.HEADER.MOBILE_BREAKPOINT
+      if (newIsMobile !== isMobile) {
+        debugHeader.debug('Mobile state changed:', { isMobile: newIsMobile, width: window.innerWidth })
+        setIsMobile(newIsMobile)
+      }
     }
     
     checkMobile()
     window.addEventListener('resize', checkMobile)
     return () => window.removeEventListener('resize', checkMobile)
-  }, [])
+  }, [isMobile])
 
   useEffect(() => {
+    debugHeader.debug('Location changed:', { pathname: location.pathname })
     const match = location.pathname.match(/\/category\/([^/]+)/)
     if (match) {
       const catId = decodeURIComponent(match[1])
       if (!expandedCategories.has(catId)) {
+        debugHeader.debug('Auto-expanding category based on location:', { catId })
         setExpandedCategories(new Set([...expandedCategories, catId]))
       }
     }
@@ -198,9 +223,14 @@ function Header({ categories, articles, isSidebarOpen, onToggleSidebar }) {
               
               return (
                 <div key={cat.id} className="tree-item">
-                  <div 
+                  <Link 
+                    to={`/category/${encodeURIComponent(cat.id)}`}
                     className={`category-link tree-node ${isExpanded ? 'expanded' : ''}`}
-                    onClick={() => toggleCategory(cat.id)}
+                    onClick={(e) => {
+                      e.preventDefault()
+                      toggleCategory(cat.id)
+                      navigate(`/category/${encodeURIComponent(cat.id)}`)
+                    }}
                     onDoubleClick={(e) => handleCategoryDoubleClick(cat.id, e)}
                   >
                     <span className="tree-arrow">
@@ -208,7 +238,7 @@ function Header({ categories, articles, isSidebarOpen, onToggleSidebar }) {
                     </span>
                     <span className="category-icon">{cat.icon}</span>
                     <span className="category-name">{cat.name}</span>
-                  </div>
+                  </Link>
                   
                   {isExpanded && catData && Object.entries(catData.topics).map(([topicName, topicData]) => {
                     const topicKey = `${cat.id}-${topicName}`

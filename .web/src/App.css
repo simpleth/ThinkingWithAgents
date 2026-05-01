@@ -58,10 +58,26 @@ html {
   min-height: 100vh;
 }
 
+.app {
+  position: relative;
+  min-height: 100vh;
+}
+
 .app-layout {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  transition: padding-left 0.3s ease;
+}
+
+@media (min-width: 769px) {
+  .app-layout {
+    padding-left: 0;
+  }
+  
+  .app-layout.sidebar-open {
+    padding-left: var(--sidebar-width);
+  }
 }
 
 .main-content {
@@ -71,28 +87,21 @@ html {
   margin: 0 auto;
   width: 100%;
   position: relative;
-  transition: margin-left 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+@media (min-width: 769px) {
+  .app-layout.sidebar-open .main-content {
+    max-width: min(var(--max-content-width), calc(100vw - var(--sidebar-width) - 4rem));
+  }
 }
 
 .main-content.home-centered {
-  margin-left: auto !important;
-  margin-right: auto !important;
-  max-width: var(--max-content-width) !important;
-  padding-left: var(--spacing-xl) !important;
-  padding-right: var(--spacing-xl) !important;
-}
-
-
-@media (min-width: 769px) {
-  .main-content {
-    margin-left: var(--sidebar-width);
-    max-width: calc(var(--max-content-width) - var(--sidebar-width));
-  }
-  
-  .main-content.sidebar-collapsed {
-    margin-left: 0;
-    max-width: var(--max-content-width);
-  }
+  margin-left: auto;
+  margin-right: auto;
+  max-width: var(--max-content-width);
+  padding-left: var(--spacing-xl);
+  padding-right: var(--spacing-xl);
 }
 
 

@@ -21,7 +21,7 @@
 .header-top {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 1.25rem;
   padding: var(--spacing-sm) var(--spacing-lg);
   min-height: 70px;
@@ -29,6 +29,24 @@
   margin: 0 auto;
   box-sizing: border-box;
   position: relative;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 1.15rem;
+  font-weight: 600;
+  white-space: nowrap;
+  margin-left: auto;
 }
 
 .header-left {
@@ -72,9 +90,6 @@
   font-size: 1.15rem;
   font-weight: 600;
   white-space: nowrap;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
 }
 
 .logo-icon {

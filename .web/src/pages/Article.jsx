@@ -4,8 +4,10 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import './Article.css'
 import { CONFIG } from '../config'
+import { debugArticle } from '../utils/debug'
 
-function Article({ articles, categories }) {
+function Article({ articles, categories, isSidebarOpen = false }) {
+  debugArticle.debug('Article component initializing', { isSidebarOpen })
   const { articleId } = useParams()
   const [content, setContent] = useState('')
   const [loading, setLoading] = useState(true)
@@ -17,28 +19,45 @@ function Article({ articles, categories }) {
   const category = article ? categories.find(c => c.id === article.category) : null
   const relatedArticles = article ? articles.filter(a => a.category === article.category && a.id !== articleId).slice(0, CONFIG.ARTICLE.RELATED_ARTICLES_COUNT) : []
 
+  debugArticle.debug('Article data:', {
+    articleId,
+    found: !!article,
+    category: category?.name,
+    relatedCount: relatedArticles.length
+  })
+
   useEffect(() => {
+    debugArticle.log('Loading article:', { articleId, title: article?.title })
     window.scrollTo(0, 0)
     setLoading(true)
     setHeadings([])
     setCurrentHeadingIndex(-1)
 
     if (article) {
+      debugArticle.debug('Fetching article content from:', article.path)
       fetch(article.path)
         .then(res => res.text())
         .then(text => {
           setContent(text)
           setLoading(false)
+          debugArticle.log('Article content loaded:', {
+            contentLength: text.length,
+            lines: text.split('\n').length
+          })
         })
-        .catch(() => {
+        .catch((error) => {
+          debugArticle.error('Failed to load article:', error)
           setContent('# 无法加载文档内容\n\n请检查文档路径是否正确。')
           setLoading(false)
         })
+    } else {
+      debugArticle.warn('Article not found for ID:', articleId)
     }
   }, [articleId, article])
 
   useEffect(() => {
     if (content) {
+      debugArticle.debug('Extracting headings from content...')
       const lines = content.split('\n')
       const headingList = []
       let inCodeBlock = false
@@ -82,6 +101,7 @@ function Article({ articles, categories }) {
       })
       
       setHeadings(headingList)
+      debugArticle.log('Headings extracted:', { count: headingList.length, headings: headingList.map(h => h.text) })
     }
   }, [content])
 
@@ -103,7 +123,13 @@ function Article({ articles, categories }) {
         }
       }
 
-      setCurrentHeadingIndex(newIndex)
+      if (newIndex !== currentHeadingIndex) {
+        debugArticle.debug('Current heading changed:', {
+          newIndex,
+          heading: newIndex >= 0 ? headings[newIndex].text : 'none'
+        })
+        setCurrentHeadingIndex(newIndex)
+      }
     }
 
     const handleScroll = () => {
@@ -125,6 +151,7 @@ function Article({ articles, categories }) {
   }, [headings])
 
   const handleHeadingClick = (id) => {
+    debugArticle.debug('Heading clicked:', { headingId: id })
     const element = document.getElementById(id)
     if (element) {
       const headerHeight = 70
@@ -170,15 +197,13 @@ function Article({ articles, categories }) {
   }
 
   return (
-    <div className="article-page">
-      {headings.length > 0 && (
-        <button
-          className="mobile-toc-btn"
-          onClick={() => setIsMobileTocOpen(!isMobileTocOpen)}
-        >
-          📑
-        </button>
-      )}
+    <div className={`article-page ${isSidebarOpen ? 'sidebar-open' : ''}`}>
+      <button
+        className={`mobile-toc-btn ${headings.length > 0 ? 'show' : ''}`}
+        onClick={() => setIsMobileTocOpen(!isMobileTocOpen)}
+      >
+        📑
+      </button>
 
       {isMobileTocOpen && (
         <div className="mobile-toc-overlay" onClick={() => setIsMobileTocOpen(false)}>
@@ -221,24 +246,23 @@ function Article({ articles, categories }) {
           )}
         </div>
 
-        <aside className="article-toc">
-          <div className="toc-fixed-header">
-            <nav className="article-breadcrumb">
-              <Link to="/" className="breadcrumb-link">首页</Link>
-              <span className="breadcrumb-separator">/</span>
-              <Link to={`/category/${article.category}`} className="breadcrumb-link">
-                <span style={{ color: category?.color }}>{category?.icon}</span>
-                <span>{category?.name}</span>
-              </Link>
-            </nav>
+        {/* 固定定位的目录 */}
+        <div className="article-toc-container">
+          <aside className="article-toc">
+            <div className="toc-fixed-header">
+              <nav className="article-breadcrumb">
+                <Link to="/" className="breadcrumb-link">首页</Link>
+                <span className="breadcrumb-separator">/</span>
+                <Link to={`/category/${article.category}`} className="breadcrumb-link">
+                  <span style={{ color: category?.color }}>{category?.icon}</span>
+                  <span>{category?.name}</span>
+                </Link>
+              </nav>
 
-            {headings.length > 0 && (
               <div className="toc-title">目录</div>
-            )}
-          </div>
+            </div>
 
-          {headings.length > 0 && (
-            <nav className="toc-nav">
+            <nav className={`toc-nav ${headings.length === 0 ? 'toc-loading' : ''}`}>
               {headings.map((heading, index) => (
                 <button
                   key={heading.id}
@@ -249,8 +273,8 @@ function Article({ articles, categories }) {
                 </button>
               ))}
             </nav>
-          )}
-        </aside>
+          </aside>
+        </div>
       </div>
     </div>
   )

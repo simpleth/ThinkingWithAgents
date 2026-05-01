@@ -7,6 +7,8 @@
   display: flex;
   gap: 2rem;
   position: relative;
+  max-width: var(--max-content-width);
+  margin: 0 auto;
 }
 
 .article-content {
@@ -17,15 +19,26 @@
   box-sizing: border-box;
 }
 
+.article-toc-container {
+  width: 240px;
+  flex-shrink: 0;
+  height: 0;
+}
+
 .article-toc {
   position: fixed;
-  right: 3rem;
   top: 100px;
   width: 240px;
   max-height: calc(100vh - 120px);
   display: flex;
   flex-direction: column;
   z-index: 10;
+  left: calc((100vw - var(--max-content-width)) / 2 + var(--max-content-width) + 2rem);
+  transition: left 0.3s ease;
+}
+
+.article-page.sidebar-open .article-toc {
+  left: calc((100vw - var(--sidebar-width) - var(--max-content-width)) / 2 + var(--max-content-width) + 2rem);
 }
 
 .toc-fixed-header {
@@ -70,12 +83,20 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-bottom: 0;
+  opacity: 1;
+  transition: opacity 0.2s ease;
 }
 
 .toc-nav {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  min-height: 100px;
+  transition: opacity 0.2s ease;
+}
+
+.toc-nav.toc-loading {
+  opacity: 0.3;
 }
 
 .toc-item {
@@ -151,6 +172,13 @@
   z-index: 100;
   box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
   transition: all 0.2s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.mobile-toc-btn.show {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .mobile-toc-btn:hover {
@@ -484,7 +512,7 @@
 }
 
 @media (max-width: 1200px) {
-  .article-toc {
+  .article-toc-container {
     display: none;
   }
 

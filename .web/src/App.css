@@ -74,6 +74,15 @@ html {
   transition: margin-left 0.3s ease;
 }
 
+.main-content.home-centered {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  max-width: var(--max-content-width) !important;
+  padding-left: var(--spacing-xl) !important;
+  padding-right: var(--spacing-xl) !important;
+}
+
+
 @media (min-width: 769px) {
   .main-content {
     margin-left: var(--sidebar-width);

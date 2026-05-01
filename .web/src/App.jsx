@@ -62,14 +62,28 @@ function App() {
             isSidebarOpen={isSidebarOpen}
             onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
           />
-          <main className={`main-content ${!isSidebarOpen ? 'sidebar-collapsed' : ''}`}>
-            <Routes>
-              <Route path="/" element={<Home categories={categories} articles={articles} />} />
-              <Route path="/category/:categoryId" element={<Category categories={categories} articles={articles} />} />
-              <Route path="/article/:articleId" element={<Article articles={articles} categories={categories} />} />
-              <Route path="/search" element={<Search articles={articles} categories={categories} />} />
-            </Routes>
-          </main>
+          <Routes>
+            <Route 
+              path="/" 
+              element={
+                <main className="main-content home-centered">
+                  <Home categories={categories} articles={articles} />
+                </main>
+              } 
+            />
+            <Route 
+              path="*" 
+              element={
+                <main className={`main-content ${!isSidebarOpen ? 'sidebar-collapsed' : ''}`}>
+                  <Routes>
+                    <Route path="/category/:categoryId" element={<Category categories={categories} articles={articles} />} />
+                    <Route path="/article/:articleId" element={<Article articles={articles} categories={categories} />} />
+                    <Route path="/search" element={<Search articles={articles} categories={categories} />} />
+                  </Routes>
+                </main>
+              } 
+            />
+          </Routes>
         </div>
         <footer className="footer">
           <p>技术研究档案库 · 知识共享</p>

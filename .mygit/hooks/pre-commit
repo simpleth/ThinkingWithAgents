@@ -1,5 +1,5 @@
 #!/bin/bash
-# Git pre-commit hook: 调用各模块脚本 + 安全检查
+# Git pre-commit hook - 调用各模块脚本 + 安全检查
 # 安装：cp .mygit/hooks/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
 
 GIT_DIR=$(git rev-parse --git-dir)
@@ -12,7 +12,13 @@ if [ "$GIT_DIRECTIVE" = "BYPASS" ] || grep -qE -- '--no-verify|--no-commit' "$GI
     echo "[!] 建议：重新提交而不使用 --no-verify，让 hook 验证格式"
 fi
 
-# 调用 README 索引更新
+# 调用各功能模块的更新脚本
+# .readme: README 索引
 if [ -f "$PROJECT_ROOT/.readme/update-index.sh" ]; then
     bash "$PROJECT_ROOT/.readme/update-index.sh"
+fi
+
+# .web: Web 知识库可视化 (构建产物不提交到 git)
+if [ -f "$PROJECT_ROOT/.web/update-web.sh" ]; then
+    bash "$PROJECT_ROOT/.web/update-web.sh"
 fi

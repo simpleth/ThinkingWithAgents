@@ -31,3 +31,7 @@ Thumbs.db
 
 # Trae IDE 配置
 .trae/
+
+# Web 模块构建产物
+.web/node_modules/
+.web/dist/

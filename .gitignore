@@ -35,3 +35,4 @@ Thumbs.db
 # Web 模块构建产物
 .web/node_modules/
 .web/dist/
+.web/public/docs/

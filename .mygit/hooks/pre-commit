@@ -1,9 +1,16 @@
 #!/bin/bash
-# Git pre-commit hook: 调用各模块脚本
+# Git pre-commit hook: 调用各模块脚本 + 安全检查
 # 安装：cp .mygit/hooks/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
 
 GIT_DIR=$(git rev-parse --git-dir)
 PROJECT_ROOT="$(cd "$GIT_DIR/.." && pwd)"
+
+# 检测是否使用了 --no-verify（绕过 hook 的行为）
+if [ "$GIT_DIRECTIVE" = "BYPASS" ] || grep -qE -- '--no-verify|--no-commit' "$GIT_DIR"/COMMIT_EDITMSG 2>/dev/null; then
+    echo "[!] 检测到 --no-verify 或 --no-commit 标记"
+    echo "[!] 提交规范未被验证，请确保已遵守 .mygit/commit-rules.json"
+    echo "[!] 建议：重新提交而不使用 --no-verify，让 hook 验证格式"
+fi
 
 # 调用 README 索引更新
 if [ -f "$PROJECT_ROOT/.readme/update-index.sh" ]; then

@@ -5,6 +5,8 @@
 > 最后更新：{{last_updated}}
 >
 > 数据源：[index.json](./.readme/index.json)
+>
+> **在线知识库**：https://simpleth.github.io/ThinkingWithAgents/
 
 ---
 

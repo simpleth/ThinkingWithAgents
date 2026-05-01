@@ -2,9 +2,11 @@
 
 > 本索引由脚本自动生成，请勿手动编辑
 >
-> 最后更新：2026-05-01 17:54
+> 最后更新：2026-05-01 18:00
 >
 > 数据源：[index.json](./.readme/index.json)
+>
+> **在线知识库**：https://simpleth.github.io/ThinkingWithAgents/
 
 ---
 

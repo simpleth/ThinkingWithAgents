@@ -16,6 +16,7 @@ RESEARCH_ROOT = Path(__file__).parent.parent
 INDEX_FILE = RESEARCH_ROOT / ".readme" / "index.json"
 WEB_ROOT = RESEARCH_ROOT / ".web"
 PUBLIC_DATA = WEB_ROOT / "public" / "data"
+PUBLIC_DOCS = WEB_ROOT / "public" / "docs"
 
 
 def generate_color_from_name(name):
@@ -70,22 +71,27 @@ def extract_description(md_path):
         lines = content.split("\n")
         desc = []
         in_code = False
+        skip_patterns = (
+            "#", "---", ">", "**版本**：", "**更新**：", "**来源**：",
+            "**作者**：", "**日期**：", "**类型**："
+        )
         for line in lines:
-            if line.strip() == "":
+            stripped = line.strip()
+            if stripped == "":
                 continue
-            if line.startswith("#") or line.startswith("---"):
-                continue
-            if line.startswith("```"):
+            if stripped.startswith("```"):
                 in_code = not in_code
                 continue
-            if not in_code:
-                desc.append(line.strip())
+            if in_code:
+                continue
+            if any(stripped.startswith(p) for p in skip_patterns):
+                continue
+            desc.append(stripped)
             if len(desc) >= 3:
                 break
         return " ".join(desc)
     except Exception:
         return ""
-
 
 def main():
     print("=" * 50)
@@ -96,6 +102,9 @@ def main():
     if PUBLIC_DATA.exists():
         shutil.rmtree(PUBLIC_DATA)
     PUBLIC_DATA.mkdir(parents=True, exist_ok=True)
+    if PUBLIC_DOCS.exists():
+        shutil.rmtree(PUBLIC_DOCS)
+    PUBLIC_DOCS.mkdir(parents=True, exist_ok=True)
 
     # 读取索引
     if not INDEX_FILE.exists():
@@ -126,9 +135,10 @@ def main():
             for report in topic.get("reports", []):
                 src_path = RESEARCH_ROOT / report["path"]
                 if src_path.exists():
-                    # 路径直接指向根目录（单一真实来源）
-                    # report["path"] 格式为 "./Agent/实践经验总结/xxx.md"，去掉 "./" 前缀
                     clean_path = report["path"].lstrip("./")
+                    doc_path = PUBLIC_DOCS / clean_path
+                    doc_path.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copy2(src_path, doc_path)
                     articles.append({
                         "id": f"{doc_id:03d}_{category}_{topic['name']}_{src_path.stem}",
                         "category": category,
@@ -136,7 +146,7 @@ def main():
                         "version": report["version"],
                         "date": report["date"],
                         "description": extract_description(src_path),
-                        "path": f"./{clean_path}",
+                        "path": f"/docs/{clean_path}",
                         "topic": topic["name"],
                     })
                     doc_id += 1

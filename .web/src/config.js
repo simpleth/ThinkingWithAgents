@@ -20,9 +20,9 @@ export const CONFIG = {
 
 export const REGEX_PATTERNS = {
   BOLD: /\*\*/g,
-  VERSION_LABEL: /版本：\s*\S+/g,
-  UPDATE_LABEL: /更新：\s*\S+/g,
-  SOURCE_LABEL: /来源：\s*\S+/g,
+  VERSION_LABEL: />\s*\*\*版本\*\*：[^>]+/g,
+  UPDATE_LABEL: />\s*\*\*更新\*\*：[^>]+/g,
+  SOURCE_LABEL: />\s*\*\*来源\*\*：[^>]+/g,
   ANGLE_BRACKET: />/g,
   ASTERISK: /\*/g,
   BACKTICK: /`/g,

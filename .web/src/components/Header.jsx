@@ -99,22 +99,34 @@ function Header({ categories, articles, isSidebarOpen, onToggleSidebar }) {
     <>
       <header className="header">
         <div className="header-top">
-          <button 
-            className="sidebar-toggle"
-            onClick={onToggleSidebar}
-            title={isSidebarOpen ? '收起目录' : '展开目录'}
-          >
-            <span className={`toggle-icon ${isSidebarOpen ? 'open' : ''}`}>
-              ☰
-            </span>
-          </button>
-          
+          <div className="header-left">
+            <button 
+              className="sidebar-toggle"
+              onClick={onToggleSidebar}
+              title={isSidebarOpen ? '收起目录' : '展开目录'}
+            >
+              <span className="toggle-icon">
+                {isSidebarOpen ? '✕' : '☰'}
+              </span>
+            </button>
+          </div>
+            
           <Link to="/" className="logo">
             <span className="logo-icon">◈</span>
-            <span className="logo-text">知识库</span>
+            <span className="logo-text">ThinkingWithAgents</span>
           </Link>
 
-          <div className="search-container">
+          <div className="header-right"></div>
+        </div>
+      </header>
+      
+      <div className="header-spacer"></div>
+
+      <aside className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
+        <div className="sidebar-content">
+          <div className="sidebar-title">知识库目录</div>
+          
+          <div className="sidebar-search">
             <form className="search-form" onSubmit={handleSearch}>
               <input
                 type="text"
@@ -126,14 +138,6 @@ function Header({ categories, articles, isSidebarOpen, onToggleSidebar }) {
               <button type="submit" className="search-btn">⌕</button>
             </form>
           </div>
-        </div>
-      </header>
-      
-      <div className="header-spacer"></div>
-
-      <aside className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
-        <div className="sidebar-content">
-          <div className="sidebar-title">知识库目录</div>
           
           <nav className="categories-nav">
             {categories.map(cat => {

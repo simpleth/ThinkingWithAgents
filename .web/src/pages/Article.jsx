@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import './Article.css'
 import { CONFIG } from '../config'
 
@@ -7,10 +9,88 @@ function Article({ articles, categories }) {
   const { articleId } = useParams()
   const [content, setContent] = useState('')
   const [loading, setLoading] = useState(true)
+  const [headings, setHeadings] = useState([])
+  const [currentHeadingIndex, setCurrentHeadingIndex] = useState(-1)
+  const [isMobileTocOpen, setIsMobileTocOpen] = useState(false)
 
   const article = articles.find(a => a.id === articleId)
   const category = article ? categories.find(c => c.id === article.category) : null
-  const relatedArticles = article ? articles.filter(a => a.category === article.category && a.id !== article.id).slice(0, CONFIG.ARTICLE.RELATED_ARTICLES_COUNT) : []
+  const relatedArticles = article ? articles.filter(a => a.category === article.category && a.id !== articleId).slice(0, CONFIG.ARTICLE.RELATED_ARTICLES_COUNT) : []
+
+  // 解析 Markdown 标题
+  useEffect(() => {
+    if (content) {
+      const lines = content.split('\n')
+      const headingList = []
+      lines.forEach(line => {
+        const match = line.match(/^(#{1,4})\s+(.+)$/)
+        if (match) {
+          headingList.push({
+            level: match[1].length,
+            text: match[2],
+            id: `heading-${headingList.length}`
+          })
+        }
+      })
+      setHeadings(headingList)
+    }
+  }, [content])
+
+  // 滚动监听，高亮当前标题
+  useEffect(() => {
+    const handleScroll = () => {
+      if (headings.length === 0) return
+      
+      const scrollPosition = window.scrollY + 100
+      let newIndex = -1
+
+      for (let i = headings.length - 1; i >= 0; i--) {
+        const element = document.getElementById(headings[i].id)
+        if (element && element.offsetTop <= scrollPosition) {
+          newIndex = i
+          break
+        }
+      }
+
+      setCurrentHeadingIndex(newIndex)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [headings])
+
+  // 滚动到指定标题
+  const handleHeadingClick = (id) => {
+    const element = document.getElementById(id)
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+    setIsMobileTocOpen(false)
+  }
+
+  // 自定义渲染组件，给标题添加 id
+  const renderers = {
+    h1: ({ children, ...props }) => {
+      const index = headings.findIndex(h => h.text === children && h.level === 1)
+      const id = index >= 0 ? headings[index].id : null
+      return <h1 id={id} className="md-h1" {...props}>{children}</h1>
+    },
+    h2: ({ children, ...props }) => {
+      const index = headings.findIndex(h => h.text === children && h.level === 2)
+      const id = index >= 0 ? headings[index].id : null
+      return <h2 id={id} className="md-h2" {...props}>{children}</h2>
+    },
+    h3: ({ children, ...props }) => {
+      const index = headings.findIndex(h => h.text === children && h.level === 3)
+      const id = index >= 0 ? headings[index].id : null
+      return <h3 id={id} className="md-h3" {...props}>{children}</h3>
+    },
+    h4: ({ children, ...props }) => {
+      const index = headings.findIndex(h => h.text === children && h.level === 4)
+      const id = index >= 0 ? headings[index].id : null
+      return <h4 id={id} className="md-h4" {...props}>{children}</h4>
+    }
+  }
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -39,109 +119,6 @@ function Article({ articles, categories }) {
     )
   }
 
-  const renderContent = (text) => {
-    const lines = text.split('\n')
-    let html = []
-    let inCodeBlock = false
-    let codeContent = []
-    let codeLang = ''
-
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i]
-
-      if (line.startsWith('```') && !inCodeBlock) {
-        inCodeBlock = true
-        codeLang = line.slice(3).trim()
-        codeContent = []
-        continue
-      }
-
-      if (line === '```' && inCodeBlock) {
-        inCodeBlock = false
-        html.push(
-          <pre key={i} className="code-block">
-            <code className={codeLang ? `language-${codeLang}` : ''}>
-              {codeContent.join('\n')}
-            </code>
-          </pre>
-        )
-        continue
-      }
-
-      if (inCodeBlock) {
-        codeContent.push(line)
-        continue
-      }
-
-      if (line.startsWith('# ')) {
-        html.push(<h1 key={i} className="md-h1">{line.slice(2)}</h1>)
-      } else if (line.startsWith('## ')) {
-        html.push(<h2 key={i} className="md-h2">{line.slice(3)}</h2>)
-      } else if (line.startsWith('### ')) {
-        html.push(<h3 key={i} className="md-h3">{line.slice(4)}</h3>)
-      } else if (line.startsWith('> ')) {
-        html.push(<blockquote key={i} className="md-blockquote">{line.slice(2)}</blockquote>)
-      } else if (line.startsWith('- ') || line.startsWith('* ')) {
-        html.push(<li key={i} className="md-li">{renderInline(line.slice(2))}</li>)
-      } else if (line.match(/^\d+\. /)) {
-        html.push(<li key={i} className="md-li numbered">{renderInline(line.replace(/^\d+\. /, ''))}</li>)
-      } else if (line.match(/^!\[.*\]\(.*\)/)) {
-        const match = line.match(/!\[(.*)\]\((.*)\)/)
-        html.push(<img key={i} className="md-image" alt={match[1]} src={match[2]} />)
-      } else if (line.match(/\[.*\]\(.*\)/)) {
-        html.push(<p key={i} className="md-p">{renderInline(line)}</p>)
-      } else if (line.trim() === '') {
-        html.push(<br key={i} />)
-      } else {
-        html.push(<p key={i} className="md-p">{renderInline(line)}</p>)
-      }
-    }
-
-    return html
-  }
-
-  const renderInline = (text) => {
-    const parts = []
-    let remaining = text
-    let key = 0
-
-    while (remaining) {
-      const codeMatch = remaining.match(/`([^`]+)`/)
-      if (codeMatch && codeMatch.index === 0) {
-        parts.push(<code key={key++} className="md-inline-code">{codeMatch[1]}</code>)
-        remaining = remaining.slice(codeMatch[0].length)
-        continue
-      }
-
-      const boldMatch = remaining.match(/\*\*([^*]+)\*\*/)
-      if (boldMatch && boldMatch.index === 0) {
-        parts.push(<strong key={key++}>{boldMatch[1]}</strong>)
-        remaining = remaining.slice(boldMatch[0].length)
-        continue
-      }
-
-      const linkMatch = remaining.match(/\[([^\]]+)\]\(([^)]+)\)/)
-      if (linkMatch && linkMatch.index === 0) {
-        parts.push(<a key={key++} href={linkMatch[2]}>{linkMatch[1]}</a>)
-        remaining = remaining.slice(linkMatch[0].length)
-        continue
-      }
-
-      const idx = remaining.search(/[`*]/)
-      if (idx === -1) {
-        parts.push(remaining)
-        break
-      } else if (idx === 0) {
-        remaining = remaining.slice(1)
-      } else {
-        parts.push(remaining.slice(0, idx))
-        remaining = remaining.slice(idx)
-      }
-    }
-
-    return parts
-  }
-
   return (
     <div className="article-page">
       <header className="article-header">
@@ -153,29 +130,75 @@ function Article({ articles, categories }) {
             <span>{category?.name}</span>
           </Link>
         </nav>
-
-        <div className="article-meta-row">
-          <span className="article-category-badge" style={{ '--cat-color': category?.color }}>
-            {category?.icon} {category?.name}
-          </span>
-          <span className="article-version">{article.version}</span>
-          <span className="article-date">{article.date}</span>
-        </div>
-
-        <h1 className="article-title">{article.title}</h1>
-        <p className="article-description">{article.description}</p>
       </header>
 
-      <div className="article-content">
-        {loading ? (
-          <div className="article-loading">
-            <div className="loading-spinner"></div>
-            <p>加载中...</p>
+      {/* 移动端目录按钮 */}
+      {headings.length > 0 && (
+        <button
+          className="mobile-toc-btn"
+          onClick={() => setIsMobileTocOpen(!isMobileTocOpen)}
+        >
+          📑
+        </button>
+      )}
+
+      {/* 移动端目录面板 */}
+      {isMobileTocOpen && (
+        <div className="mobile-toc-overlay" onClick={() => setIsMobileTocOpen(false)}>
+          <div className="mobile-toc-panel" onClick={(e) => e.stopPropagation()}>
+            <div className="mobile-toc-header">
+              <h3>目录</h3>
+              <button
+                className="mobile-toc-close"
+                onClick={() => setIsMobileTocOpen(false)}
+              >
+                ✕
+              </button>
+            </div>
+            <nav className="toc-nav">
+              {headings.map((heading, index) => (
+                <button
+                  key={heading.id}
+                  className={`toc-item toc-level-${heading.level} ${currentHeadingIndex === index ? 'toc-active' : ''}`}
+                  onClick={() => handleHeadingClick(heading.id)}
+                >
+                  {heading.text}
+                </button>
+              ))}
+            </nav>
           </div>
-        ) : (
-          <div className="markdown-body">
-            {renderContent(content)}
-          </div>
+        </div>
+      )}
+
+      <div className="article-layout">
+        <div className="article-content">
+          {loading ? (
+            <div className="article-loading">
+              <div className="loading-spinner"></div>
+              <p>加载中...</p>
+            </div>
+          ) : (
+            <div className="markdown-body">
+              <ReactMarkdown remarkPlugins={[remarkGfm]} components={renderers}>{content}</ReactMarkdown>
+            </div>
+          )}
+        </div>
+
+        {headings.length > 0 && (
+          <aside className="article-toc">
+            <div className="toc-title">目录</div>
+            <nav className="toc-nav">
+              {headings.map((heading, index) => (
+                <button
+                  key={heading.id}
+                  className={`toc-item toc-level-${heading.level} ${currentHeadingIndex === index ? 'toc-active' : ''}`}
+                  onClick={() => handleHeadingClick(heading.id)}
+                >
+                  {heading.text}
+                </button>
+              ))}
+            </nav>
+          </aside>
         )}
       </div>
     </div>

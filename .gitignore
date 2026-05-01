@@ -36,3 +36,6 @@ Thumbs.db
 .web/node_modules/
 .web/dist/
 .web/public/docs/
+.web/public/data/
+.web/.env
+.web/.env.local

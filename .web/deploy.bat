@@ -11,7 +11,7 @@ echo =========================================
 
 REM 1. 更新数据和构建
 echo 📦 更新数据和构建...
-call "%WEB_DIR%\update-web.bat
+call "%WEB_DIR%\update-web.bat"
 
 REM 2. 部署到 GitHub Pages
 echo 🌐 部署到 GitHub Pages...

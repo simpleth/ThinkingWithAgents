@@ -128,5 +128,5 @@
 
 ## 相关文档
 
-- [QUICKSTART.md](./QUICKSTART.md) - 快速上手指南
-- [DOCS.md](./DOCS.md) - 文档导航
+- [QUICKSTART.md](../QUICKSTART.md) - 快速上手指南
+- [DOCS.md](../DOCS.md) - 文档导航

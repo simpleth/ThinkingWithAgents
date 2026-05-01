@@ -1,0 +1,156 @@
+#!/usr/bin/env python3
+"""
+Git commit-msg hook: 验证提交信息格式
+同时提供规范说明查询功能
+
+安装：cp .mygit/hooks/commit-msg .git/hooks/commit-msg && chmod +x .git/hooks/commit-msg
+查看规范：python .mygit/hooks/commit-msg --help
+"""
+
+import sys
+import re
+import json
+import os
+from pathlib import Path
+
+def find_project_root():
+    current = Path(__file__).resolve()
+    while current != current.parent:
+        if (current / '.mygit' / 'commit-rules.json').exists():
+            return current
+        current = current.parent
+    return None
+
+def load_rules():
+    PROJECT_ROOT = find_project_root()
+    RULES_FILE = PROJECT_ROOT / '.mygit' / 'commit-rules.json' if PROJECT_ROOT else None
+    if not RULES_FILE or not RULES_FILE.exists():
+        return None
+    with open(RULES_FILE, 'r', encoding='utf-8') as f:
+        return json.load(f)
+
+def show_help(rules):
+    """显示规范说明"""
+    print("=" * 60)
+    print("Git 提交规范说明")
+    print("=" * 60)
+    print()
+    print("[x] 提交格式模板：")
+    print("-" * 40)
+    print(rules['template'])
+    print()
+    print("[=] 字段说明：")
+    print("-" * 40)
+    for field_name, field_info in rules['fields'].items():
+        desc = field_info.get('description', '')
+        tip = field_info.get('tip', '')
+        example = field_info.get('example', '')
+        print(f"\n[{field_name}]{desc}")
+        if 'values' in field_info:
+            print(f"  可选值：{', '.join(field_info['values'])}")
+        if example:
+            print(f"  示例：{example}")
+        if tip:
+            print(f"  -> {tip}")
+    print()
+    print("[T] 提交类型：")
+    print("-" * 40)
+    for type_name, type_desc in rules['types'].items():
+        print(f"  {type_name:10} - {type_desc}")
+    print()
+    print("[!] 规则：")
+    print("-" * 40)
+    for rule_name, rule_desc in rules['rules'].items():
+        print(f"  {rule_desc}")
+    print()
+    print("=" * 60)
+
+def detect_bypass():
+    """检测是否使用了绕过 hook 的标记"""
+    try:
+        parent_pid = os.getppid()
+        with open(f'/proc/{parent_pid}/cmdline', 'rb') as f:
+            cmdline = f.read().decode('utf-8', errors='ignore')
+        bypass_markers = ['--no-verify', '--no-commit', '--allow-empty']
+        for marker in bypass_markers:
+            if marker in cmdline:
+                return marker
+    except (FileNotFoundError, ProcessLookupError, PermissionError):
+        pass
+    return None
+
+def validate_commit_msg(content, rules):
+    errors = []
+    lines = content.strip().split('\n')
+    first_line = lines[0] if lines else ''
+
+    pattern_rule = rules['fields'].get('first_line', {})
+    if pattern_rule:
+        pattern = pattern_rule['pattern']
+        if not re.match(pattern, first_line):
+            errors.append(f"第一行格式错误：{first_line}")
+            errors.append(f"  应为：[类型] 简短描述")
+
+    for field_name, field_rule in rules['fields'].items():
+        if field_name in ['first_line']:
+            continue
+        field = field_rule.get('field', '')
+        if not field:
+            continue
+        if field not in content:
+            errors.append(f"缺少必填字段：{field}")
+        elif 'values' in field_rule:
+            match = re.search(rf'{re.escape(field)}\s*([a-z]+)', content)
+            if not match or match.group(1) not in field_rule['values']:
+                errors.append(f"字段值错误：{field} 必须是 {', '.join(field_rule['values'])}")
+
+    return errors
+
+def main():
+    if len(sys.argv) > 1 and sys.argv[1] in ['--help', '-h', 'help']:
+        rules = load_rules()
+        if rules:
+            show_help(rules)
+        else:
+            print("[-] 未找到规则文件 .mygit/commit-rules.json")
+        sys.exit(0)
+
+    if len(sys.argv) < 2:
+        print("[-] 用法：git-commit-msg <commit-msg-file>")
+        print("    或：git-commit-msg --help  查看规范说明")
+        sys.exit(1)
+
+    bypass_marker = detect_bypass()
+
+    commit_msg_file = sys.argv[1]
+
+    with open(commit_msg_file, 'r', encoding='utf-8') as f:
+        content = f.read()
+
+    rules = load_rules()
+    if not rules:
+        print("[!] 未找到规则文件，跳过校验")
+        sys.exit(0)
+
+    if bypass_marker:
+        print(f"\n[!] 检测到 '{bypass_marker}' 标记，提交规范未被验证")
+        print("[!] 请确保提交信息已遵守 .mygit/commit-rules.json")
+        print("[!] 建议：移除 --no-verify 重新提交，让 hook 验证格式\n")
+
+    errors = validate_commit_msg(content, rules)
+
+    if errors:
+        print('\n[X] 提交信息格式验证失败\n')
+        print('错误列表：')
+        for i, error in enumerate(errors, 1):
+            print(f'  {i}. {error}')
+        print(f'\n[?] 查看完整规范：python .mygit/hooks/commit-msg --help')
+        if bypass_marker:
+            print(f'\n[!] 注意：因使用了 {bypass_marker}，hook 验证被跳过')
+        sys.exit(1)
+
+    print('[OK] 提交信息格式验证通过')
+    sys.exit(0)
+
+if __name__ == '__main__':
+    main()

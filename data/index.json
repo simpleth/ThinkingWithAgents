@@ -1,0 +1,139 @@
+{
+  "last_updated": "2026-05-01 17:55",
+  "categories": [
+    {
+      "id": "Agent",
+      "name": "Agent",
+      "icon": "⛴",
+      "color": "#6ec977"
+    },
+    {
+      "id": "JDK",
+      "name": "JDK",
+      "icon": "⛨",
+      "color": "#df7785"
+    },
+    {
+      "id": "OpenClaw",
+      "name": "OpenClaw",
+      "icon": "⛳",
+      "color": "#64a5e3"
+    },
+    {
+      "id": "前端状态管理",
+      "name": "前端状态管理",
+      "icon": "♹",
+      "color": "#e0a68f"
+    },
+    {
+      "id": "对话结构",
+      "name": "对话结构",
+      "icon": "⛰",
+      "color": "#5aa4dd"
+    },
+    {
+      "id": "文生视频模型",
+      "name": "文生视频模型",
+      "icon": "⚀",
+      "color": "#e160a5"
+    },
+    {
+      "id": "浏览器插件生态",
+      "name": "浏览器插件生态",
+      "icon": "☽",
+      "color": "#5bcdac"
+    }
+  ],
+  "articles": [
+    {
+      "id": "001_Agent_实践经验总结_AI 协作经验总结",
+      "category": "Agent",
+      "title": "AI 协作经验总结",
+      "version": "1.0",
+      "date": "26-04",
+      "description": "本文档记录了与 AI Agent 协作开发技术研究档案库的实战经验，特别是避免过度设计的教训。 核心目标：建立一套让 AI 能够**质疑、讨论、共识**的协作机制，而不是盲目顺从。 经过 2-3 小时的重构合作，项目从 250 行冗余文档精简到 60 行核心理念，删除了 3 个冗余脚本和 5 处重复内容。",
+      "path": "/docs/Agent/实践经验总结/AI 协作经验总结.md",
+      "topic": "实践经验总结"
+    },
+    {
+      "id": "002_Agent_实践经验总结_设计实践",
+      "category": "Agent",
+      "title": "设计实践",
+      "version": "1.0",
+      "date": "26-03",
+      "description": "本文档记录使用 AI Agent 协作管理技术档案的实战经验，聚焦于**如何避免过度设计**和**保持文档一致性**。 **定义**：信息只在一处维护 **违反后果**：",
+      "path": "/docs/Agent/实践经验总结/设计实践.md",
+      "topic": "实践经验总结"
+    },
+    {
+      "id": "003_Agent_源码分析_Claude Code 架构分析",
+      "category": "Agent",
+      "title": "Claude Code 架构分析",
+      "version": "1.0",
+      "date": "26-04",
+      "description": "2026 年 3 月 31 日，Anthropic 因 `.npmignore` 配置缺失，意外通过 npm 源映射文件泄露了 Claude Code 的完整源代码。本文档基于泄露源码进行逆向工程分析，揭示其架构设计、核心模块和内部机制。 **核心结论**： - 单主循环架构，而非复杂的多 Agent 协作",
+      "path": "/docs/Agent/源码分析/Claude Code 架构分析.md",
+      "topic": "源码分析"
+    },
+    {
+      "id": "004_JDK_演进史_report_v1.0",
+      "category": "JDK",
+      "title": "report_v1.0",
+      "version": "v1.0",
+      "date": "26-04",
+      "description": "JDK（Java Development Kit）是 Java 技术的核心开发工具包，自 1995 年发布以来经历了多次重大演进。 - Java 语言首次公开发布 - 核心特性：面向对象、跨平台、垃圾回收",
+      "path": "/docs/JDK/演进史/report_v1.0.md",
+      "topic": "演进史"
+    },
+    {
+      "id": "005_OpenClaw_架构分析_OpenClaw 核心架构深度解析",
+      "category": "OpenClaw",
+      "title": "OpenClaw 核心架构深度解析",
+      "version": "1.0",
+      "date": "26-04",
+      "description": "OpenClaw（原名 Moltbot、Clawdbot）是一个开源、自托管的 AI Agent 框架，由奥地利开发者 Peter Steinberger 创建。它将大语言模型转化为持久化、可使用工具的智能代理，并通过标准化接口连接到日常通讯应用（如 WhatsApp、Telegram、飞书、钉钉等）。 **为什么值得研究**：OpenClaw 代表了一种新兴的 AI 应用范式——将 AI 助手作为基础设施而非单纯的聊天机器人。其架构设计体现了 2026 年 AI 工程化的最佳实践：插件化、本地优先、记忆驱动、技能可扩展。 **核心结论预览**：",
+      "path": "/docs/OpenClaw/架构分析/OpenClaw 核心架构深度解析.md",
+      "topic": "架构分析"
+    },
+    {
+      "id": "006_前端状态管理_演进史_report_v1.2",
+      "category": "前端状态管理",
+      "title": "report_v1.2",
+      "version": "v1.2",
+      "date": "26-03",
+      "description": "**核心思想**：MVC 模式，通过 `set/get` 触发 `change` 事件 **贡献**： - 首次将数据与视图分离",
+      "path": "/docs/前端状态管理/演进史/report_v1.2.md",
+      "topic": "演进史"
+    },
+    {
+      "id": "007_对话结构_结构分析_对话结构研究报告",
+      "category": "对话结构",
+      "title": "对话结构研究报告",
+      "version": "5.0",
+      "date": "26-04",
+      "description": "*** 对话是人类最基本的交流方式。然而，现有研究往往局限于理论分析，缺乏对实际对话操作的深入探讨。本研究旨在填补这一空白，不仅分析历史上的对话形式，更要揭示它们在实际生活中的具体操作方法。 1. 不同对话形式的实际运作方式是什么？",
+      "path": "/docs/对话结构/结构分析/对话结构研究报告.md",
+      "topic": "结构分析"
+    },
+    {
+      "id": "008_文生视频模型_对比评测_2026 主流模型全景对比",
+      "category": "文生视频模型",
+      "title": "2026 主流模型全景对比",
+      "version": "1.0",
+      "date": "26-03",
+      "description": "文生视频（Text-to-Video）技术在 2025-2026 年经历了快速发展，从早期实验室演示发展到商业化应用。本报告对比分析市面上主流的文生视频模型，为技术选型提供参考。 | 维度 | 领先者 | 说明 | |------|--------|------|",
+      "path": "/docs/文生视频模型/对比评测/2026 主流模型全景对比.md",
+      "topic": "对比评测"
+    },
+    {
+      "id": "009_浏览器插件生态_技术调研_report_v1.0",
+      "category": "浏览器插件生态",
+      "title": "report_v1.0",
+      "version": "v1.0",
+      "date": "2026-05",
+      "description": "**状态**：待审阅 浏览器插件（扩展）是唯一能深度介入用户浏览行为的客户端形态。凭借介于浏览器内核与网页之间的特殊位置，插件获得了对网络请求、DOM 内容、浏览器状态的直接访问能力，同时保持了用户可控的权限边界和极低的资源开销。 根据 StatCounter 2026 年初数据，全球桌面浏览器市场份额大致分布如下：",
+      "path": "/docs/浏览器插件生态/技术调研/report_v1.0.md",
+      "topic": "技术调研"
+    }
+  ]
+}

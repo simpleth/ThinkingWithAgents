@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# 编辑器
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 日志
+*.log
+
+# Git 临时文件
+.mygit/*.tmp
+.mygit/*.msg
+
+# Qwen Code 配置
+.qwen/
+
+# Trae IDE 配置
+.trae/
+
+# Web 模块构建产物
+.web/node_modules/
+.web/dist/

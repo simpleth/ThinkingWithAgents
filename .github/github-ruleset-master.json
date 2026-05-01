@@ -1,0 +1,52 @@
+# GitHub Ruleset Configuration
+# 导入方式：GitHub → 仓库 → Settings → Rulesets → New ruleset → Import ruleset
+
+{
+  "name": "master-branch-protection",
+  "target": "branch",
+  "enforcement": "active",
+  "conditions": [
+    {
+      "property": "ref_name",
+      "operator": "equals",
+      "value": "refs/heads/master"
+    }
+  ],
+  "rules": [
+    {
+      "type": "commit_message_pattern",
+      "parameters": {
+        "operator": "starts_with",
+        "pattern": "["
+      }
+    },
+    {
+      "type": "commit_message_pattern",
+      "parameters": {
+        "operator": "regex",
+        "pattern": "^\\[(feat|fix|docs|refactor|config)(\\+[a-z]+)?\\]\\s.+"
+      }
+    },
+    {
+      "type": "commit_message_pattern",
+      "parameters": {
+        "operator": "regex",
+        "pattern": "提交者："
+      }
+    },
+    {
+      "type": "commit_message_pattern",
+      "parameters": {
+        "operator": "regex",
+        "pattern": "## Why"
+      }
+    },
+    {
+      "type": "commit_message_pattern",
+      "parameters": {
+        "operator": "regex",
+        "pattern": "## What"
+      }
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "description": "Git 提交信息规范",
+  "template": "[类型] 简短描述\n\n提交者：[human | agent]\n\n## Why（为什么做）\n\n## What（做了什么）\n",
+  "fields": {
+    "first_line": {
+      "pattern": "^\\[[a-z]+(\\+[a-z]+)*\\]\\s.+",
+      "description": "第一行：提交类型 + 简短描述",
+      "example": "[feat] 新增报告"
+    },
+    "author": {
+      "field": "提交者：",
+      "values": ["human", "agent"],
+      "description": "提交者标识：区分内容来源",
+      "tip": "human=人类亲自编写的内容，agent=Agent 生成/执行的内容"
+    },
+    "why": {
+      "field": "## Why",
+      "description": "动机说明：为什么做这个改动，背景是什么",
+      "tip": "Why 比 What 更重要，说明动机不只是改动"
+    },
+    "what": {
+      "field": "## What",
+      "description": "改动说明：具体做了什么，用列表形式"
+    }
+  },
+  "types": {
+    "feat": "新增：功能、模块、规则、研究方向",
+    "fix": "修复：Bug 修复、内容纠错、配置修正",
+    "docs": "文档：README、说明、注释更新",
+    "refactor": "重构：结构优化（不影响功能）",
+    "config": "配置：Git、工具、环境变量设置"
+  },
+  "rules": {
+    "type_combination": "最多组合 2 种类型，如 [feat+docs]",
+    "example": "[refactor+docs] 简化项目结构\n\n提交者：agent\n\n## Why（为什么做）\n\n整理目录结构\n\n## What（做了什么）\n\n- 删除冗余文件\n- 更新文档引用"
+  }
+}

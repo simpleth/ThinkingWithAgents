@@ -1,0 +1,158 @@
+{
+  "last_updated": "2026-05-01 16:48",
+  "research_directions": [
+    {
+      "name": "Agent",
+      "path": "./Agent",
+      "topics": [
+        {
+          "name": "实践经验总结",
+          "path": "./Agent/实践经验总结",
+          "reports": [
+            {
+              "name": "AI 协作经验总结",
+              "filename": "AI 协作经验总结.md",
+              "path": "./Agent/实践经验总结/AI 协作经验总结.md",
+              "version": "1.0",
+              "date": "26-04"
+            },
+            {
+              "name": "设计实践",
+              "filename": "设计实践.md",
+              "path": "./Agent/实践经验总结/设计实践.md",
+              "version": "1.0",
+              "date": "26-03"
+            }
+          ]
+        },
+        {
+          "name": "源码分析",
+          "path": "./Agent/源码分析",
+          "reports": [
+            {
+              "name": "Claude Code 架构分析",
+              "filename": "Claude Code 架构分析.md",
+              "path": "./Agent/源码分析/Claude Code 架构分析.md",
+              "version": "1.0",
+              "date": "26-04"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "JDK",
+      "path": "./JDK",
+      "topics": [
+        {
+          "name": "演进史",
+          "path": "./JDK/演进史",
+          "reports": [
+            {
+              "name": "report_v1.0",
+              "filename": "report_v1.0.md",
+              "path": "./JDK/演进史/report_v1.0.md",
+              "version": "v1.0",
+              "date": "26-04"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "OpenClaw",
+      "path": "./OpenClaw",
+      "topics": [
+        {
+          "name": "架构分析",
+          "path": "./OpenClaw/架构分析",
+          "reports": [
+            {
+              "name": "OpenClaw 核心架构深度解析",
+              "filename": "OpenClaw 核心架构深度解析.md",
+              "path": "./OpenClaw/架构分析/OpenClaw 核心架构深度解析.md",
+              "version": "1.0",
+              "date": "26-04"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "前端状态管理",
+      "path": "./前端状态管理",
+      "topics": [
+        {
+          "name": "演进史",
+          "path": "./前端状态管理/演进史",
+          "reports": [
+            {
+              "name": "report_v1.2",
+              "filename": "report_v1.2.md",
+              "path": "./前端状态管理/演进史/report_v1.2.md",
+              "version": "v1.2",
+              "date": "26-03"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "对话结构",
+      "path": "./对话结构",
+      "topics": [
+        {
+          "name": "结构分析",
+          "path": "./对话结构/结构分析",
+          "reports": [
+            {
+              "name": "对话结构研究报告",
+              "filename": "对话结构研究报告.md",
+              "path": "./对话结构/结构分析/对话结构研究报告.md",
+              "version": "5.0",
+              "date": "26-04"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "文生视频模型",
+      "path": "./文生视频模型",
+      "topics": [
+        {
+          "name": "对比评测",
+          "path": "./文生视频模型/对比评测",
+          "reports": [
+            {
+              "name": "2026 主流模型全景对比",
+              "filename": "2026 主流模型全景对比.md",
+              "path": "./文生视频模型/对比评测/2026 主流模型全景对比.md",
+              "version": "1.0",
+              "date": "26-03"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "浏览器插件生态",
+      "path": "./浏览器插件生态",
+      "topics": [
+        {
+          "name": "技术调研",
+          "path": "./浏览器插件生态/技术调研",
+          "reports": [
+            {
+              "name": "report_v1.0",
+              "filename": "report_v1.0.md",
+              "path": "./浏览器插件生态/技术调研/report_v1.0.md",
+              "version": "v1.0",
+              "date": "2026-05"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

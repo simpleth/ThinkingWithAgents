@@ -1,0 +1,32 @@
+name: Commit Lint
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  commit-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get commit messages
+        id: commits
+        run: |
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            COMMITS=$(git log origin/master..HEAD --format="%s%n%n%b||COMMIT||" | sed 's/"/\\"/g')
+          else
+            COMMITS=$(git log HEAD~10..HEAD --format="%s%n%n%b||COMMIT||" | sed 's/"/\\"/g')
+          fi
+          echo "COMMITS<<EOF" >> $GITHUB_ENV
+          echo "$COMMITS" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: Validate commit messages
+        env:
+          COMMIT_MESSAGES: ${{ env.COMMITS }}
+        run: python .github/commit-validate.py

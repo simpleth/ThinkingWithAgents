@@ -41,7 +41,36 @@ function Article({ articles, categories }) {
     if (content) {
       const lines = content.split('\n')
       const headingList = []
+      let inCodeBlock = false
+      let inHtmlComment = false
+      
       lines.forEach(line => {
+        const stripped = line.trim()
+        
+        // 处理 HTML 注释
+        if (stripped.includes('<!--')) {
+          inHtmlComment = true
+          if (stripped.includes('-->')) {
+            inHtmlComment = false
+          }
+          return
+        }
+        if (inHtmlComment) {
+          if (stripped.includes('-->')) {
+            inHtmlComment = false
+          }
+          return
+        }
+        
+        // 检查代码块边界
+        if (stripped.startsWith('```')) {
+          inCodeBlock = !inCodeBlock
+          return
+        }
+        
+        // 代码块中的内容跳过
+        if (inCodeBlock) return
+        
         const match = line.match(/^(#{1,4})\s+(.+)$/)
         if (match) {
           headingList.push({
@@ -51,6 +80,7 @@ function Article({ articles, categories }) {
           })
         }
       })
+      
       setHeadings(headingList)
     }
   }, [content])

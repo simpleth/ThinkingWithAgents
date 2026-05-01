@@ -55,13 +55,13 @@ function App() {
   return (
     <HashRouter>
       <div className="app">
+        <Header 
+          categories={categories} 
+          articles={articles}
+          isSidebarOpen={isSidebarOpen}
+          onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+        />
         <div className="app-layout">
-          <Header 
-            categories={categories} 
-            articles={articles}
-            isSidebarOpen={isSidebarOpen}
-            onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
-          />
           <Routes>
             <Route 
               path="/" 
@@ -72,14 +72,26 @@ function App() {
               } 
             />
             <Route 
-              path="*" 
+              path="/category/:categoryId" 
               element={
                 <main className={`main-content ${!isSidebarOpen ? 'sidebar-collapsed' : ''}`}>
-                  <Routes>
-                    <Route path="/category/:categoryId" element={<Category categories={categories} articles={articles} />} />
-                    <Route path="/article/:articleId" element={<Article articles={articles} categories={categories} />} />
-                    <Route path="/search" element={<Search articles={articles} categories={categories} />} />
-                  </Routes>
+                  <Category categories={categories} articles={articles} />
+                </main>
+              } 
+            />
+            <Route 
+              path="/article/:articleId" 
+              element={
+                <main className={`main-content ${!isSidebarOpen ? 'sidebar-collapsed' : ''}`}>
+                  <Article articles={articles} categories={categories} />
+                </main>
+              } 
+            />
+            <Route 
+              path="/search" 
+              element={
+                <main className={`main-content ${!isSidebarOpen ? 'sidebar-collapsed' : ''}`}>
+                  <Search articles={articles} categories={categories} />
                 </main>
               } 
             />

@@ -8,6 +8,7 @@ import os
 import json
 import shutil
 import hashlib
+import re
 from pathlib import Path
 from datetime import datetime
 
@@ -59,7 +60,7 @@ def generate_color_from_name(name):
 
 def generate_icon_from_name(name):
     """基于分类名称动态生成图标字符"""
-    icons = "◈◉◐◧◨◩◪◫⌂☂☃☄★☆☎☏☜☝☞☟☠☡☢☣☤☥☦☧☨☩☪☫☬☭☮☯☰☱☲☳☴☵☶☷☸☹☺☻☼☽☾☿♀♂♠♡♢♣♤♥♦♧♨♩♪♫♬♭♮♯♰♱♲♳♴♵♶♷♸♹♺♻♼♽♾♿⚀⚁⚂⚃⚄⚅⚆⚇⚈⚉⚊⚋⚌⚍⚎⚏⚐⚑⚒⚓⚔⚕⚖⚗⚘⚙⚚⚛⚜⚝⚞⚟⚠⚡⚢⚣⚤⚥⚦⚧⚨⚩⚪⚫⚬⚭⚮⚯⚰⚱⚲⚳⚴⚵⚶⚷⚸⚹⚺⚻⚼⚽⚾⚿⛀⛁⛂⛃⛄⛅⛆⛇⛈⛉⛊⛋⛌⛍⛎⛏⛐⛑⛒⛓⛔⛕⛖⛗⛘⛙⛚⛛⛜⛝⛞⛟⛠⛡⛢⛣⛤⛥⛦⛧⛨⛩⛪⛫⛬⛭⛮⛯⛰⛱⛲⛳⛴⛵⛶⛷⛸⛹⛺⛻⛼⛽⛾⛿"
+    icons = "◈◉◐◧◨◩◪◫⌂☂☃☄★☆☎☏☜☝☞☟☠☡☢☣☤☥☦☧☨☩☪☫☬☭☮☯☰☱☲☳☴☵☶☷☸☹☺☻☼☽☾☿♀♂♠♡♢♣♤♥♦♧♨♩♪♫♬♭♮♯♰♱♲♳♴♵♶♷♸♹♺♻♼♽♾♿⚀⚁⚂⚃⚄⚅⚆⚇⚈⚉⚊⚋⛀⛁⛂⛃⛄⛅⛆⛇⛈⛉⛊⛋⛌⛍⛎⛏⛐⛑⛒⛓⛔⛕⛖⛗⛘⛙⛚⛛⛜⛝⛞⛟⛠⛡⛢⛣⛤⛥⛦⛧⛨⛩⛪⛫⛬⛭⛮⛯⛰⛱⛲⛳⛴⛵⛶⛷⛸⛹⛺⛻⛼⛽⛾⛿"
     hash_val = int(hashlib.md5(name.encode("utf-8")).hexdigest(), 16)
     return icons[hash_val % len(icons)]
 
@@ -71,24 +72,57 @@ def extract_description(md_path):
         lines = content.split("\n")
         desc = []
         in_code = False
+        in_html_comment = False
         skip_patterns = (
-            "#", "---", ">", "**版本**：", "**更新**：", "**来源**：",
+            "---", ">", "**版本**：", "**更新**：", "**来源**：",
             "**作者**：", "**日期**：", "**类型**："
         )
         for line in lines:
             stripped = line.strip()
             if stripped == "":
                 continue
+            
+            # 处理 HTML 注释
+            if "<!--" in stripped:
+                in_html_comment = True
+                if "-->" in stripped:
+                    in_html_comment = False
+                continue
+            if in_html_comment:
+                if "-->" in stripped:
+                    in_html_comment = False
+                continue
+            
+            # 处理代码块
             if stripped.startswith("```"):
                 in_code = not in_code
                 continue
             if in_code:
                 continue
+            
+            # 处理跳过模式
             if any(stripped.startswith(p) for p in skip_patterns):
                 continue
-            desc.append(stripped)
-            if len(desc) >= 3:
-                break
+            
+            # 跳过以 # 开头的内容（标题、代码注释、序号列表）
+            if stripped.startswith("#"):
+                continue
+            
+            # 跳过以数字序号开头的行（如 "1. xxx"）
+            if re.match(r"^\d+\.", stripped):
+                continue
+            
+            # 处理单行代码（`code`），提取纯文本
+            clean_line = stripped
+            if "`" in clean_line:
+                # 简单处理，移除 `code` 标记
+                clean_line = re.sub(r"`[^`]*`", "", clean_line)
+            
+            if clean_line.strip():
+                desc.append(clean_line.strip())
+                if len(desc) >= 3:
+                    break
+        
         return " ".join(desc)
     except Exception:
         return ""

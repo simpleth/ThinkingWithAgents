@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { HashRouter, Routes, Route } from 'react-router-dom'
 import Header from './components/Header'
 import Home from './pages/Home'
 import Category from './pages/Category'
@@ -53,7 +53,7 @@ function App() {
   }
 
   return (
-    <BrowserRouter basename={import.meta.env.BASE_URL}>
+    <HashRouter>
       <div className="app">
         <div className="app-layout">
           <Header 
@@ -75,7 +75,7 @@ function App() {
           <p>技术研究档案库 · 知识共享</p>
         </footer>
       </div>
-    </BrowserRouter>
+    </HashRouter>
   )
 }
 

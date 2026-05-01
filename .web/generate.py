@@ -146,7 +146,7 @@ def main():
                         "version": report["version"],
                         "date": report["date"],
                         "description": extract_description(src_path),
-                        "path": f"/docs/{clean_path}",
+                        "path": f"docs/{clean_path}",
                         "topic": topic["name"],
                     })
                     doc_id += 1

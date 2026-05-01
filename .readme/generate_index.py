@@ -16,10 +16,17 @@ import json
 from pathlib import Path
 from datetime import datetime
 from urllib.parse import quote
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-from matplotlib.ticker import FuncFormatter
+
+# matplotlib 为可选依赖，避免 CI 环境构建失败
+HAS_MATPLOTLIB = False
+try:
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    from matplotlib.ticker import FuncFormatter
+    HAS_MATPLOTLIB = True
+except ImportError:
+    pass
 
 RESEARCH_ROOT = Path(__file__).parent.parent
 INDEX_FILE = RESEARCH_ROOT / ".readme" / "index.json"
@@ -213,7 +220,7 @@ def format_chars(count, pos):
 
 def generate_stats_chart_png(stats_history):
     """生成 PNG 统计曲线图 - D3 Style with Dual Y-axis"""
-    if not stats_history:
+    if not stats_history or not HAS_MATPLOTLIB:
         return ""
 
     dates = [datetime.strptime(c["date"], "%Y-%m-%d") for c in stats_history]

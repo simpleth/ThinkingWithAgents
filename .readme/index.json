@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-29 03:33",
+  "last_updated": "2026-05-01 11:48",
   "research_directions": [
     {
       "name": "Agent",
@@ -130,6 +130,25 @@
               "path": "./文生视频模型/对比评测/2026 主流模型全景对比.md",
               "version": "1.0",
               "date": "26-03"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "浏览器插件生态",
+      "path": "./浏览器插件生态",
+      "topics": [
+        {
+          "name": "技术调研",
+          "path": "./浏览器插件生态/技术调研",
+          "reports": [
+            {
+              "name": "report_v1.0",
+              "filename": "report_v1.0.md",
+              "path": "./浏览器插件生态/技术调研/report_v1.0.md",
+              "version": "v1.0",
+              "date": "2026-05"
             }
           ]
         }

@@ -48,10 +48,10 @@ mkdir "JDK\演进史"
 
 ```bash
 # Windows
-copy "JDK\演进史\template.md" "JDK\演进史\report_v1.0.md"
+echo. > "JDK\演进史\report_v1.0.md"
 
 # Linux / macOS
-cp "JDK/演进史/template.md" "JDK/演进史/report_v1.0.md"
+touch "JDK/演进史/report_v1.0.md"
 ```
 
 ### 步骤 3：编辑内容
@@ -110,8 +110,7 @@ git commit
 ```markdown
 # 报告标题
 
-> **版本**：v1.0
-> **更新**：2026-04
+> v1.0 | 2026-04
 
 ---
 

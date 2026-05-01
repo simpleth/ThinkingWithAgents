@@ -72,7 +72,6 @@ git commit → pre-commit hook → generate_index.py → 扫描目录 → 生成
 **关键文件：**
 - `.readme/generate_index.py`：主逻辑
 - `.readme/index.json`：索引数据
-- `.readme/template.md`：模板
 
 ---
 

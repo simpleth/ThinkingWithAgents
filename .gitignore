@@ -28,3 +28,6 @@ Thumbs.db
 
 # Qwen Code 配置
 .qwen/
+
+# Trae IDE 配置
+.trae/

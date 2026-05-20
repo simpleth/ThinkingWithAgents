@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams, useNavigate } from 'react-router-dom'
 import './Search.css'
 
 function Search({ articles, categories }) {
@@ -7,6 +7,7 @@ function Search({ articles, categories }) {
   const query = searchParams.get('q') || ''
   const [searchQuery, setSearchQuery] = useState(query)
   const [results, setResults] = useState([])
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (query) {
@@ -22,17 +23,14 @@ function Search({ articles, categories }) {
     }
   }, [query, articles])
 
+  useEffect(() => {
+    setSearchQuery(query)
+  }, [query])
+
   const handleSearch = (e) => {
     e.preventDefault()
     if (searchQuery.trim()) {
-      window.history.pushState({}, '', `/search?q=${encodeURIComponent(searchQuery)}`)
-      const lowerQuery = searchQuery.toLowerCase()
-      const filtered = articles.filter(
-        a =>
-          a.title.toLowerCase().includes(lowerQuery) ||
-          a.description.toLowerCase().includes(lowerQuery)
-      )
-      setResults(filtered)
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`)
     }
   }
 

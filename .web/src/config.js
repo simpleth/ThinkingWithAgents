@@ -18,16 +18,3 @@ export const CONFIG = {
   }
 }
 
-export const REGEX_PATTERNS = {
-  BOLD: /\*\*/g,
-  VERSION_LABEL: />\s*\*\*版本\*\*：[^>]+/g,
-  UPDATE_LABEL: />\s*\*\*更新\*\*：[^>]+/g,
-  SOURCE_LABEL: />\s*\*\*来源\*\*：[^>]+/g,
-  ANGLE_BRACKET: />/g,
-  ASTERISK: /\*/g,
-  BACKTICK: /`/g,
-  MARKDOWN_LINK: /\[([^\]]+)\]\([^)]+\)/g,
-  MULTIPLE_SPACES: /\s+/g,
-  MARKDOWN_FORMAT: /[#*>`_\[\]()!]/g,
-  NEWLINE: /\n+/g
-}

@@ -1,20 +1,3 @@
-:root {
-  --bg-primary: #0d0d0d;
-  --bg-secondary: #141414;
-  --bg-tertiary: #1a1a1a;
-  --bg-card: #1f1f1f;
-  --text-primary: #e8d5b7;
-  --text-secondary: #a89b8c;
-  --text-muted: #6b6358;
-  --accent: #c9a86c;
-  --accent-hover: #ddbf7f;
-  --border: #2a2a2a;
-  --shadow: rgba(0,0,0,0.4);
-  --font-display: 'Newsreader', Georgia, serif;
-  --font-body: 'IBM Plex Sans', -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
-}
-
 * {
   margin: 0;
   padding: 0;
@@ -27,10 +10,10 @@ html {
 
 body {
   font-family: var(--font-body);
-  background: var(--bg-primary);
-  color: var(--text-primary);
   line-height: 1.6;
   min-height: 100vh;
+  background: var(--bg-primary);
+  color: var(--text-primary);
 }
 
 ::selection {
@@ -73,4 +56,34 @@ button {
 
 input, textarea {
   font-family: inherit;
+}
+
+[data-theme="dark"] {
+  --bg-primary: #0d0d0d;
+  --bg-secondary: #141414;
+  --bg-tertiary: #1a1a1a;
+  --bg-card: #1f1f1f;
+  --text-primary: #e8d5b7;
+  --text-secondary: #a89b8c;
+  --text-muted: #6b6358;
+  --accent: #c9a86c;
+  --accent-hover: #ddbf7f;
+  --accent-light: rgba(201, 168, 108, 0.12);
+  --border: #2a2a2a;
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-theme="auto"] {
+    --bg-primary: #0d0d0d;
+    --bg-secondary: #141414;
+    --bg-tertiary: #1a1a1a;
+    --bg-card: #1f1f1f;
+    --text-primary: #e8d5b7;
+    --text-secondary: #a89b8c;
+    --text-muted: #6b6358;
+    --accent: #c9a86c;
+    --accent-hover: #ddbf7f;
+    --accent-light: rgba(201, 168, 108, 0.12);
+    --border: #2a2a2a;
+  }
 }

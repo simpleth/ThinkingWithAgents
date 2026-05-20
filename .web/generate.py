@@ -65,65 +65,148 @@ def generate_icon_from_name(name):
     return icons[hash_val % len(icons)]
 
 
+def _strip_markdown(text):
+    """Remove all markdown formatting, returning clean plain text."""
+    text = re.sub(r'<!--.*?-->', '', text, flags=re.DOTALL)
+    text = re.sub(r'!\[([^\]]*)\]\([^)]*\)', r'\1', text)
+    text = re.sub(r'\[([^\]]*)\]\([^)]*\)', r'\1', text)
+    text = re.sub(r'\*\*\*([^*]+)\*\*\*', r'\1', text)
+    text = re.sub(r'\*\*([^*]+)\*\*', r'\1', text)
+    text = re.sub(r'__([^_]+)__', r'\1', text)
+    text = re.sub(r'\*([^*]+)\*', r'\1', text)
+    text = re.sub(r'_([^_]+)_', r'\1', text)
+    text = re.sub(r'`([^`]+)`', r'\1', text)
+    text = text.replace('`', '').replace('*', '').replace('_', '')
+    text = re.sub(r'^>\s*', '', text)
+    text = re.sub(r'^#+\s*', '', text)
+    text = re.sub(r'^\s*[-*+]\s+', '', text)
+    text = re.sub(r'^\s*\d+[.)]\s+', '', text)
+    text = re.sub(r'\s+', ' ', text)
+    return text.strip()
+
+
+def _score_line(text, line_idx, total_lines):
+    """Score a cleaned line for description suitability (higher = better)."""
+    score = 0.0
+
+    pos = line_idx / max(total_lines, 1)
+    if pos < 0.10:
+        score += 6
+    elif pos < 0.25:
+        score += 4
+    elif pos < 0.45:
+        score += 2
+    elif pos > 0.85:
+        score -= 4
+    elif pos > 0.65:
+        score -= 2
+
+    length = len(text)
+    if length >= 80:
+        score += 10
+    elif length >= 50:
+        score += 8
+    elif length >= 25:
+        score += 5
+    elif length < 10:
+        score -= 4
+
+    natural_chars = len(re.findall(r'[\u4e00-\u9fff\u3400-\u4dbf\w]', text))
+    ratio = natural_chars / max(length, 1)
+    if ratio >= 0.85:
+        score += 6
+    elif ratio >= 0.70:
+        score += 4
+    elif ratio < 0.40:
+        score -= 3
+
+    code_chars = len(re.findall(r'[{}()\[\];=&|<>]', text))
+    score -= code_chars * 0.5
+
+    cjk_chars = len(re.findall(r'[\u4e00-\u9fff\u3400-\u4dbf]', text))
+    score += min(cjk_chars / 25, 5)
+
+    return score
+
+
 def extract_description(md_path):
-    """从 Markdown 文件提取描述"""
+    """从 Markdown 文件提取纯文本描述"""
     try:
         content = md_path.read_text(encoding="utf-8")
         lines = content.split("\n")
-        desc = []
-        in_code = False
+
+        in_code_block = False
         in_html_comment = False
-        skip_patterns = (
-            "---", ">", "**版本**：", "**更新**：", "**来源**：",
-            "**作者**：", "**日期**：", "**类型**："
+        candidates = []
+
+        meta_keywords = re.compile(
+            r'^\s*(>\s*)?(\*{0,2}(版本|更新|来源|作者|日期|类型|状态|数据来源|摘要)\*{0,2}\s*[:：])'
         )
-        for line in lines:
+
+        for i, line in enumerate(lines):
             stripped = line.strip()
-            if stripped == "":
+            if not stripped:
                 continue
-            
-            # 处理 HTML 注释
-            if "<!--" in stripped:
+
+            if '<!--' in stripped:
                 in_html_comment = True
-                if "-->" in stripped:
+                if '-->' in stripped:
                     in_html_comment = False
                 continue
             if in_html_comment:
-                if "-->" in stripped:
+                if '-->' in stripped:
                     in_html_comment = False
                 continue
-            
-            # 处理代码块
-            if stripped.startswith("```"):
-                in_code = not in_code
+
+            if stripped.startswith('```'):
+                in_code_block = not in_code_block
                 continue
-            if in_code:
+            if in_code_block:
                 continue
-            
-            # 处理跳过模式
-            if any(stripped.startswith(p) for p in skip_patterns):
+
+            if re.match(r'^(\*{3,}|-{3,}|_{3,})\s*$', stripped):
                 continue
-            
-            # 跳过以 # 开头的内容（标题、代码注释、序号列表）
-            if stripped.startswith("#"):
+
+            if meta_keywords.match(stripped):
                 continue
-            
-            # 跳过以数字序号开头的行（如 "1. xxx"）
-            if re.match(r"^\d+\.", stripped):
+
+            if re.match(r'^#{1,6}\s', stripped):
                 continue
-            
-            # 处理单行代码（`code`），提取纯文本
-            clean_line = stripped
-            if "`" in clean_line:
-                # 简单处理，移除 `code` 标记
-                clean_line = re.sub(r"`[^`]*`", "", clean_line)
-            
-            if clean_line.strip():
-                desc.append(clean_line.strip())
-                if len(desc) >= 3:
-                    break
-        
-        return " ".join(desc)
+
+            clean = _strip_markdown(stripped)
+            if not clean:
+                continue
+
+            if re.match(r'^\|?[\s\-:|]+\|?$', clean):
+                continue
+
+            if clean.count('|') >= 2:
+                cells = [c.strip() for c in clean.split('|') if c.strip()]
+                if cells and max(len(c) for c in cells) < 12:
+                    continue
+                clean = '; '.join(cells)
+
+            if len(clean) < 10:
+                continue
+
+            score = _score_line(clean, i, len(lines))
+            if score > 0:
+                candidates.append((i, clean, score))
+
+        if not candidates:
+            return ''
+
+        candidates.sort(key=lambda x: -x[2])
+        top = candidates[:3]
+        top.sort(key=lambda x: x[0])
+
+        result = ' '.join(c[1] for c in top)
+        result = re.sub(r'(.{12,}?)\s+\1', r'\1', result)
+
+        if len(result) > 300:
+            result = result[:297] + '...'
+
+        return result
     except Exception:
         return ""
 
@@ -173,10 +256,24 @@ def main():
                     doc_path = PUBLIC_DOCS / clean_path
                     doc_path.parent.mkdir(parents=True, exist_ok=True)
                     shutil.copy2(src_path, doc_path)
+                    title = report["name"]
+                    if re.match(r'^report_v\d+\.\d+$', report["name"]):
+                        try:
+                            content = src_path.read_text(encoding="utf-8")
+                            for line in content.split("\n"):
+                                m = re.match(r'^#\s+(.+)', line.strip())
+                                if m:
+                                    title = m.group(1).strip()
+                                    break
+                        except Exception:
+                            pass
+                        if title == report["name"]:
+                            title = f"{topic['name']} - {category}"
+
                     articles.append({
                         "id": f"{doc_id:03d}_{category}_{topic['name']}_{src_path.stem}",
                         "category": category,
-                        "title": report["name"],
+                        "title": title,
                         "version": report["version"],
                         "date": report["date"],
                         "description": extract_description(src_path),

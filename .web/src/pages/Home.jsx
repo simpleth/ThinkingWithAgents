@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import './Home.css'
-import { CONFIG, REGEX_PATTERNS } from '../config'
+import { CONFIG } from '../config'
 
 function Home({ categories, articles }) {
   const recentArticles = [...articles]
@@ -9,32 +9,6 @@ function Home({ categories, articles }) {
     .slice(0, CONFIG.HOME.RECENT_ARTICLES_COUNT)
 
   const featuredArticles = articles.slice(0, CONFIG.HOME.FEATURED_ARTICLES_COUNT)
-
-  const cleanDescription = (text) => {
-    if (!text) return ''
-
-    let result = text
-
-    result = result.replace(REGEX_PATTERNS.BOLD, '')
-    result = result.replace(REGEX_PATTERNS.VERSION_LABEL, '')
-    result = result.replace(REGEX_PATTERNS.UPDATE_LABEL, '')
-    result = result.replace(REGEX_PATTERNS.SOURCE_LABEL, '')
-    result = result.replace(REGEX_PATTERNS.ANGLE_BRACKET, '')
-    result = result.replace(REGEX_PATTERNS.ASTERISK, '')
-    result = result.replace(REGEX_PATTERNS.BACKTICK, '')
-    result = result.replace(REGEX_PATTERNS.MARKDOWN_LINK, '$1')
-    result = result.replace(REGEX_PATTERNS.MULTIPLE_SPACES, ' ')
-    result = result.trim()
-
-    if (!result) {
-      result = text.slice(0, CONFIG.HOME.FALLBACK_DESCRIPTION_LENGTH)
-        .replace(REGEX_PATTERNS.MARKDOWN_FORMAT, '')
-        .replace(REGEX_PATTERNS.NEWLINE, ' ')
-        .trim()
-    }
-
-    return result.slice(0, CONFIG.HOME.DESCRIPTION_MAX_LENGTH)
-  }
 
   return (
     <div className="home-page">
@@ -71,7 +45,6 @@ function Home({ categories, articles }) {
         <div className="featured-list">
           {featuredArticles.map(article => {
             const cat = categories.find(c => c.id === article.category)
-            const desc = cleanDescription(article.description)
             return (
               <div
                 key={article.id}
@@ -88,7 +61,7 @@ function Home({ categories, articles }) {
                     </div>
                     <h3 className="featured-title">{article.title}</h3>
                   </div>
-                  {desc && <p className="featured-desc">{desc}</p>}
+                  {article.description && <p className="featured-desc">{article.description}</p>}
                 </Link>
               </div>
             )

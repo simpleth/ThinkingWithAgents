@@ -1,7 +1,12 @@
-# 前端状态管理研究报告
+---
+title: "前端状态管理研究报告"
+version: "v1.2"
+date: 2026-03
+tags: [frontend, state-management, redux, signals, evolution]
+status: published
+---
 
-> **版本**：v1.2  
-> **更新**：2026-03
+# 前端状态管理研究报告
 
 ---
 

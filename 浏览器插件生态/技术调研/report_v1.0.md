@@ -1,10 +1,12 @@
+---
+title: "浏览器插件生态技术调研报告"
+version: "v1.0"
+date: 2026-05
+tags: [browser-extension, content-script, ai-integration, cross-platform, mv3]
+status: published
+---
+
 # 浏览器插件生态技术调研报告
-
-> 评估内容处理与 AI 集成方向的插件技术可行性
-
-**日期**：2026-05-01
-**类型**：技术调研报告
-**状态**：待审阅
 
 ---
 

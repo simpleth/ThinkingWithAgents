@@ -146,6 +146,24 @@
   font-family: var(--font-mono);
 }
 
+.result-score {
+  font-size: 0.65rem;
+  font-family: var(--font-mono);
+  color: var(--accent);
+  background: var(--accent-light);
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.result-title mark,
+.result-desc mark {
+  background: rgba(201, 168, 108, 0.2);
+  color: var(--accent);
+  border-radius: 2px;
+  padding: 0 0.125rem;
+}
+
 .no-results,
 .search-hint {
   display: flex;

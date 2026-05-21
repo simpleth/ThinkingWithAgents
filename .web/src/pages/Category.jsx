@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import './Category.css'
+import { CONFIG } from '../config'
 
 function Category({ categories, articles }) {
   const { categoryId } = useParams()
@@ -61,6 +62,13 @@ function Category({ categories, articles }) {
                 </div>
                 <h2 className="article-title">{article.title}</h2>
                 <p className="article-desc">{article.description}</p>
+                {Array.isArray(article.tags) && article.tags.length > 0 && (
+                  <div className="article-card-tags">
+                    {article.tags.slice(0, CONFIG.ARTICLES.TAGS_MAX_DISPLAY).map(tag => (
+                      <span key={tag} className="tag-pill">{tag}</span>
+                    ))}
+                  </div>
+                )}
                 <span className="article-read">
                   阅读全文
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none">

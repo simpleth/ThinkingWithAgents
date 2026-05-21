@@ -1,7 +1,12 @@
-# JDK 演进史
+---
+title: "JDK 演进史"
+version: "v1.0"
+date: 2026-04
+tags: [jdk, java, evolution, lts, technology-history]
+status: published
+---
 
-> **版本**：v1.0
-> **更新**：2026-04
+# JDK 演进史
 
 ---
 

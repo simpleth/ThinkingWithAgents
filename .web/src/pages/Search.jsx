@@ -1,27 +1,71 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { Link, useSearchParams, useNavigate } from 'react-router-dom'
 import './Search.css'
+import { CONFIG } from '../config'
+
+function scoreArticle(article, queryWords, category) {
+  let score = 0
+  const titleLower = (article.title || '').toLowerCase()
+  const descLower = (article.description || '').toLowerCase()
+  const catNameLower = (category?.name || '').toLowerCase()
+  const tags = Array.isArray(article.tags) ? article.tags.map(t => t.toLowerCase()) : []
+
+  for (const word of queryWords) {
+    if (titleLower.includes(word)) {
+      score += CONFIG.SEARCH.WEIGHT_TITLE
+    }
+    if (tags.some(t => t.includes(word) || word.includes(t))) {
+      score += CONFIG.SEARCH.WEIGHT_TAG
+    }
+    if (catNameLower.includes(word)) {
+      score += CONFIG.SEARCH.WEIGHT_CATEGORY
+    }
+    if (descLower.includes(word)) {
+      score += CONFIG.SEARCH.WEIGHT_DESCRIPTION
+    }
+  }
+
+  return score
+}
+
+function highlightText(text, queryWords) {
+  if (!text || queryWords.length === 0) return text
+  const escapedWords = queryWords.map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+  const pattern = escapedWords.join('|')
+  const regex = new RegExp(`(${pattern})`, 'gi')
+  const parts = text.split(regex)
+  const testRegex = new RegExp(pattern, 'i')
+  return parts.map((part, i) =>
+    testRegex.test(part) ? <mark key={i}>{part}</mark> : part
+  )
+}
 
 function Search({ articles, categories }) {
   const [searchParams] = useSearchParams()
   const query = searchParams.get('q') || ''
   const [searchQuery, setSearchQuery] = useState(query)
-  const [results, setResults] = useState([])
   const navigate = useNavigate()
 
-  useEffect(() => {
-    if (query) {
-      const lowerQuery = query.toLowerCase()
-      const filtered = articles.filter(
-        a =>
-          a.title.toLowerCase().includes(lowerQuery) ||
-          a.description.toLowerCase().includes(lowerQuery)
-      )
-      setResults(filtered)
-    } else {
-      setResults([])
-    }
-  }, [query, articles])
+  const queryWords = useMemo(() => {
+    return query
+      .toLowerCase()
+      .split(/\s+/)
+      .filter(w => w.length > 0)
+  }, [query])
+
+  const results = useMemo(() => {
+    if (!query || queryWords.length === 0) return []
+    const scored = articles.map(article => {
+      const cat = categories.find(c => c.id === article.category)
+      return {
+        article,
+        score: scoreArticle(article, queryWords, cat)
+      }
+    })
+    return scored
+      .filter(r => r.score > 0)
+      .sort((a, b) => b.score - a.score)
+  }, [query, queryWords, articles, categories])
 
   useEffect(() => {
     setSearchQuery(query)
@@ -65,7 +109,7 @@ function Search({ articles, categories }) {
 
         {results.length > 0 ? (
           <div className="results-list">
-            {results.map((article, index) => {
+            {results.map(({ article, score }, index) => {
               const category = categories.find(c => c.id === article.category)
               return (
                 <Link
@@ -77,11 +121,12 @@ function Search({ articles, categories }) {
                   <div className="result-category" style={{ color: category?.color }}>
                     {category?.icon} {category?.name}
                   </div>
-                  <h3 className="result-title">{article.title}</h3>
-                  <p className="result-desc">{article.description}</p>
+                  <h3 className="result-title">{highlightText(article.title, queryWords)}</h3>
+                  <p className="result-desc">{highlightText(article.description, queryWords)}</p>
                   <div className="result-meta">
                     <span className="result-version">{article.version}</span>
                     <span className="result-date">{article.date}</span>
+                    <span className="result-score" title="匹配分数">{score}分</span>
                   </div>
                 </Link>
               )

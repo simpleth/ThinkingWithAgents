@@ -161,6 +161,25 @@
   transition: transform 0.2s ease;
 }
 
+.article-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-bottom: 1rem;
+}
+
+.tag-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.5rem;
+  font-size: 0.6875rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  background: var(--bg-tertiary);
+  border-radius: 10px;
+  white-space: nowrap;
+}
+
 .category-not-found,
 .empty-state {
   display: flex;

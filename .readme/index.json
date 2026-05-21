@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-22 01:18",
+  "last_updated": "2026-05-22 01:32",
   "research_directions": [
     {
       "name": "Agent",
@@ -61,8 +61,7 @@
                 "lts",
                 "technology-history"
               ],
-              "status": "published",
-              "expiry": "2028-04"
+              "status": "published"
             }
           ]
         }

@@ -15,6 +15,20 @@ export const CONFIG = {
   },
   CATEGORY: {
     ARTICLES_PER_PAGE: 10
+  },
+  FRESHNESS: {
+    STALE_MONTHS: 6,
+    ARCHIVE_MONTHS: 12
+  },
+  SEARCH: {
+    WEIGHT_TITLE: 10,
+    WEIGHT_TAG: 8,
+    WEIGHT_CATEGORY: 5,
+    WEIGHT_DESCRIPTION: 3,
+    WEIGHT_PARTIAL: 1
+  },
+  ARTICLES: {
+    TAGS_MAX_DISPLAY: 6
   }
 }
 

@@ -4,6 +4,10 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import './Article.css'
 import { debugArticle } from '../utils/debug'
+import { CONFIG } from '../config'
+
+const STATUS_LABELS = { published: '已发布', draft: '草稿', archived: '已归档' }
+const STATUS_CLASSES = { published: 's-published', draft: 's-draft', archived: 's-archived' }
 
 function Article({ articles, categories, isSidebarOpen = false }) {
   const { articleId } = useParams()
@@ -215,6 +219,72 @@ function Article({ articles, categories, isSidebarOpen = false }) {
           ) : (
             <div className="markdown-body">
               <ReactMarkdown remarkPlugins={[remarkGfm]} components={renderers}>{content}</ReactMarkdown>
+            </div>
+          )}
+
+          {article && (
+            <div className="article-footer">
+              {article.status && (
+                <div className="article-status-row">
+                  <span className={`status-badge ${STATUS_CLASSES[article.status] || ''}`}>
+                    {STATUS_LABELS[article.status] || article.status}
+                  </span>
+                </div>
+              )}
+
+              {article.date && (() => {
+                const [y, m] = article.date.split('-').map(Number)
+                if (!y || !m) return null
+                const months = (new Date().getFullYear() - y) * 12 + (new Date().getMonth() + 1 - m)
+                if (months >= CONFIG.FRESHNESS.ARCHIVE_MONTHS) {
+                  return <div className="article-expiry-row"><span className="expiry-label">已归档（{months}个月前更新）</span></div>
+                }
+                if (months >= CONFIG.FRESHNESS.STALE_MONTHS) {
+                  return <div className="article-expiry-row"><span className="expiry-label">可能过时（{months}个月前更新）</span></div>
+                }
+                return null
+              })()}
+
+              {Array.isArray(article.tags) && article.tags.length > 0 && (
+                <div className="article-tags-section">
+                  <h3 className="article-section-title">标签</h3>
+                  <div className="article-tags-list">
+                    {article.tags.map(tag => (
+                      <Link key={tag} to={`/search?q=${encodeURIComponent(tag)}`} className="tag-pill-link">
+                        {tag}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {Array.isArray(article.related) && article.related.length > 0 && (() => {
+                const relatedArticles = article.related
+                  .map(filename => articles.find(a =>
+                    a.id.endsWith(filename) || (a.path && a.path.includes(filename))
+                  ))
+                  .filter(Boolean)
+                if (relatedArticles.length === 0) return null
+                return (
+                  <div className="article-related-section">
+                    <h3 className="article-section-title">相关研究</h3>
+                    <div className="article-related-list">
+                      {relatedArticles.map(ra => {
+                        const rcat = categories.find(c => c.id === ra.category)
+                        return (
+                          <Link key={ra.id} to={`/article/${ra.id}`} className="related-item">
+                            <span className="related-icon" style={{ color: rcat?.color }}>{rcat?.icon}</span>
+                            <div className="related-info">
+                              <span className="related-title">{ra.title}</span>
+                              <span className="related-meta">{rcat?.name} · {ra.date}</span>
+                            </div>
+                          </Link>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )
+              })()}
             </div>
           )}
         </article>

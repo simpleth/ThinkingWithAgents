@@ -8,19 +8,20 @@
 
 项目已配置好完整的自动化流程，无需手动部署！
 
-### 🔄 自动化触发方式
+### 🔄 自动化流程
 
-| 方式 | 说明 |
-|------|------|
-| **Git 提交** | `git commit` 时自动生成数据 + 构建 |
-| **推送到 master** | GitHub Actions 自动部署到 GitHub Pages |
-| **手动触发** | 可在 GitHub Actions 页面手动触发部署 |
+| 阶段 | 触发时机 | 具体执行 |
+|------|----------|----------|
+| 索引生成 | `git commit`（pre-commit hook） | `python .readme/generate_index.py`：扫描目录 → 生成 `.readme/index.json` + `README.md`（**入库**） |
+| 数据 + 构建 | `git push` master（GitHub Actions） | `pip install` → `generate_index.py` → `generate.py` → `npm ci` → `npm run build` → 部署 `dist/` 到 GitHub Pages |
+
+> **为什么 commit 时不执行 `generate.py`**：`generate.py` 产出均在 `.web/.gitignore` 中，不入库。CI 部署前必然重新生成。本地开发时 `npm run dev` 自动通过 `predev` 脚本生成数据。
 
 ### 🚀 推荐使用流程
 
 ```bash
 # 1. 修改文章内容或代码
-# 2. 正常提交（会自动生成数据 + 构建）
+# 2. 正常提交（会自动更新 README 索引）
 git add .
 git commit -m "[feat] 更新某篇文章"
 
@@ -40,12 +41,11 @@ git push
 | `public/` | 静态资源 |
 | `public/data/index.json` | 动态生成的索引数据 |
 | `public/docs/` | 复制的 Markdown 文档 |
-| `generate.py` | 数据生成脚本 |
-| `update-web.sh` / `update-web.bat` | Web 知识库更新脚本（由 pre-commit hook 调用） |
-| `deploy.sh` / `deploy.bat` | 一键部署脚本 |
+| `generate.py` | 数据生成脚本（`npm run dev` 通过 `predev` 自动调用） |
 | `vite.config.js` | Vite 配置 |
-| `package.json` | 依赖定义 |
-| `.github/workflows/pages.yml` | GitHub Actions 自动部署配置 |
+| `vitest.config.js` | 测试配置 |
+| `package.json` | 依赖定义 + 脚本（`dev`/`build`/`test`） |
+| `.github/workflows/pages.yml` | GitHub Actions 自动部署 |
 
 ---
 
@@ -54,8 +54,10 @@ git push
 ```bash
 cd .web
 npm install
-npm run dev
+npm run dev      # 自动运行 predev → 生成数据 → 启动 Vite
 ```
+
+`predev` 脚本自动执行 `generate_index.py && generate.py`，无需手动准备数据。
 
 访问：http://localhost:5173/
 

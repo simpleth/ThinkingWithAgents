@@ -5,12 +5,17 @@ Web 知识库数据生成器
 """
 
 import os
+import sys
 import json
 import shutil
 import hashlib
 import re
 from pathlib import Path
 from datetime import datetime
+
+if sys.platform == 'win32':
+    import io
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 # 路径配置
 RESEARCH_ROOT = Path(__file__).parent.parent
@@ -270,7 +275,7 @@ def main():
                         if title == report["name"]:
                             title = f"{topic['name']} - {category}"
 
-                    articles.append({
+                    article_data = {
                         "id": f"{doc_id:03d}_{category}_{topic['name']}_{src_path.stem}",
                         "category": category,
                         "title": title,
@@ -279,7 +284,11 @@ def main():
                         "description": extract_description(src_path),
                         "path": f"docs/{clean_path}",
                         "topic": topic["name"],
-                    })
+                    }
+                    for field in ['tags', 'status', 'expiry', 'related']:
+                        if field in report:
+                            article_data[field] = report[field]
+                    articles.append(article_data)
                     doc_id += 1
 
     # 保存数据

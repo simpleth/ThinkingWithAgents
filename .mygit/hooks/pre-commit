@@ -13,12 +13,10 @@ if [ "$GIT_DIRECTIVE" = "BYPASS" ] || grep -qE -- '--no-verify|--no-commit' "$GI
 fi
 
 # 调用各功能模块的更新脚本
-# .readme: README 索引
+# .readme: README 索引（产出文件入库）
 if [ -f "$PROJECT_ROOT/.readme/update-index.sh" ]; then
     bash "$PROJECT_ROOT/.readme/update-index.sh"
 fi
 
-# .web: Web 知识库可视化 (构建产物不提交到 git)
-if [ -f "$PROJECT_ROOT/.web/update-web.sh" ]; then
-    bash "$PROJECT_ROOT/.web/update-web.sh"
-fi
+# .web: Web 知识库数据（产出 gitignored，本地开发前手动运行 update-web.bat 即可）
+# 构建和部署统一由 GitHub Actions 负责，不在 commit 时执行

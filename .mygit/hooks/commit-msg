@@ -11,6 +11,7 @@ import sys
 import re
 import json
 import os
+import subprocess
 from pathlib import Path
 
 def find_project_root():
@@ -66,17 +67,31 @@ def show_help(rules):
     print("=" * 60)
 
 def detect_bypass():
-    """检测是否使用了绕过 hook 的标记"""
-    try:
-        parent_pid = os.getppid()
-        with open(f'/proc/{parent_pid}/cmdline', 'rb') as f:
-            cmdline = f.read().decode('utf-8', errors='ignore')
-        bypass_markers = ['--no-verify', '--no-commit', '--allow-empty']
-        for marker in bypass_markers:
-            if marker in cmdline:
-                return marker
-    except (FileNotFoundError, ProcessLookupError, PermissionError):
-        pass
+    """检测是否使用了绕过 hook 的标记（跨平台）"""
+    markers = ['--no-verify', '--no-commit', '--allow-empty']
+
+    if sys.platform == 'linux':
+        try:
+            parent_pid = os.getppid()
+            with open(f'/proc/{parent_pid}/cmdline', 'rb') as f:
+                cmdline = f.read().decode('utf-8', errors='ignore')
+            for marker in markers:
+                if marker in cmdline:
+                    return marker
+        except (FileNotFoundError, ProcessLookupError, PermissionError):
+            pass
+    elif sys.platform == 'win32':
+        try:
+            result = subprocess.run(
+                ['wmic', 'process', 'where', f'processid={os.getppid()}', 'get', 'commandline'],
+                capture_output=True, text=True, timeout=5
+            )
+            for marker in markers:
+                if marker in result.stdout:
+                    return marker
+        except Exception:
+            pass
+
     return None
 
 def validate_commit_msg(content, rules):

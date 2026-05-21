@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-21 01:24",
+  "last_updated": "2026-05-22 00:49",
   "research_directions": [
     {
       "name": "Agent",
@@ -13,15 +13,38 @@
               "name": "AI 协作经验总结",
               "filename": "AI 协作经验总结.md",
               "path": "./Agent/实践经验总结/AI 协作经验总结.md",
-              "version": "1.0",
-              "date": "26-04"
+              "version": "v1.0",
+              "date": "2026-04",
+              "tags": [
+                "agent-collaboration",
+                "dry",
+                "yagni",
+                "best-practices",
+                "mistake-prevention"
+              ],
+              "status": "published",
+              "related": [
+                "设计实践.md",
+                "Claude Code 架构分析.md"
+              ]
             },
             {
-              "name": "设计实践",
+              "name": "Agent 协作设计实践",
               "filename": "设计实践.md",
               "path": "./Agent/实践经验总结/设计实践.md",
-              "version": "1.0",
-              "date": "26-03"
+              "version": "v1.0",
+              "date": "2026-03",
+              "tags": [
+                "agent-collaboration",
+                "dry",
+                "yagni",
+                "over-engineering",
+                "document-design"
+              ],
+              "status": "published",
+              "related": [
+                "AI 协作经验总结.md"
+              ]
             }
           ]
         },
@@ -33,8 +56,19 @@
               "name": "Claude Code 架构分析",
               "filename": "Claude Code 架构分析.md",
               "path": "./Agent/源码分析/Claude Code 架构分析.md",
-              "version": "1.0",
-              "date": "26-04"
+              "version": "v1.0",
+              "date": "2026-04",
+              "tags": [
+                "claude-code",
+                "architecture-analysis",
+                "source-code-leak",
+                "agent-design",
+                "memory-system"
+              ],
+              "status": "published",
+              "related": [
+                "OpenClaw 核心架构深度解析.md"
+              ]
             }
           ]
         }
@@ -49,11 +83,20 @@
           "path": "./JDK/演进史",
           "reports": [
             {
-              "name": "report_v1.0",
+              "name": "JDK 演进史",
               "filename": "report_v1.0.md",
               "path": "./JDK/演进史/report_v1.0.md",
               "version": "v1.0",
-              "date": "26-04"
+              "date": "2026-04",
+              "tags": [
+                "jdk",
+                "java",
+                "evolution",
+                "lts",
+                "technology-history"
+              ],
+              "status": "published",
+              "expiry": "2028-04"
             }
           ]
         }
@@ -71,12 +114,28 @@
               "name": "OpenClaw 核心架构深度解析",
               "filename": "OpenClaw 核心架构深度解析.md",
               "path": "./OpenClaw/架构分析/OpenClaw 核心架构深度解析.md",
-              "version": "1.0",
-              "date": "26-04"
+              "version": "v1.0",
+              "date": "2026-04",
+              "tags": [
+                "openclaw",
+                "agent-framework",
+                "architecture",
+                "memory-system",
+                "plugin-design"
+              ],
+              "status": "published",
+              "related": [
+                "Claude Code 架构分析.md"
+              ]
             }
           ]
         }
       ]
+    },
+    {
+      "name": "tests",
+      "path": "./tests",
+      "topics": []
     },
     {
       "name": "前端状态管理",
@@ -87,11 +146,19 @@
           "path": "./前端状态管理/演进史",
           "reports": [
             {
-              "name": "report_v1.2",
+              "name": "前端状态管理研究报告",
               "filename": "report_v1.2.md",
               "path": "./前端状态管理/演进史/report_v1.2.md",
               "version": "v1.2",
-              "date": "26-03"
+              "date": "2026-03",
+              "tags": [
+                "frontend",
+                "state-management",
+                "redux",
+                "signals",
+                "evolution"
+              ],
+              "status": "published"
             }
           ]
         }
@@ -109,8 +176,16 @@
               "name": "对话结构研究报告",
               "filename": "对话结构研究报告.md",
               "path": "./对话结构/结构分析/对话结构研究报告.md",
-              "version": "5.0",
-              "date": "26-04"
+              "version": "v5.0",
+              "date": "2026-04",
+              "tags": [
+                "dialogue-structure",
+                "socratic-method",
+                "debate",
+                "communication",
+                "critical-thinking"
+              ],
+              "status": "published"
             }
           ]
         }
@@ -125,11 +200,19 @@
           "path": "./文生视频模型/对比评测",
           "reports": [
             {
-              "name": "2026 主流模型全景对比",
+              "name": "2026 主流文生视频模型全景对比",
               "filename": "2026 主流模型全景对比.md",
               "path": "./文生视频模型/对比评测/2026 主流模型全景对比.md",
-              "version": "1.0",
-              "date": "26-03"
+              "version": "v1.0",
+              "date": "2026-03",
+              "tags": [
+                "text-to-video",
+                "ai-model",
+                "comparison",
+                "sora",
+                "veo"
+              ],
+              "status": "published"
             }
           ]
         }
@@ -144,11 +227,19 @@
           "path": "./浏览器插件生态/技术调研",
           "reports": [
             {
-              "name": "report_v1.0",
+              "name": "浏览器插件生态技术调研报告",
               "filename": "report_v1.0.md",
               "path": "./浏览器插件生态/技术调研/report_v1.0.md",
               "version": "v1.0",
-              "date": "2026-05"
+              "date": "2026-05",
+              "tags": [
+                "browser-extension",
+                "content-script",
+                "ai-integration",
+                "cross-platform",
+                "mv3"
+              ],
+              "status": "published"
             }
           ]
         }

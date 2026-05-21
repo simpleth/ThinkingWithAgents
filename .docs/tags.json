@@ -1,0 +1,178 @@
+{
+  "agent-collaboration": {
+    "count": 0,
+    "description": "",
+    "deprecated": true
+  },
+  "dry": {
+    "count": 0,
+    "description": "",
+    "deprecated": true
+  },
+  "yagni": {
+    "count": 0,
+    "description": "",
+    "deprecated": true
+  },
+  "best-practices": {
+    "count": 0,
+    "description": "",
+    "deprecated": true
+  },
+  "mistake-prevention": {
+    "count": 0,
+    "description": "",
+    "deprecated": true
+  },
+  "over-engineering": {
+    "count": 0,
+    "description": "",
+    "deprecated": true
+  },
+  "document-design": {
+    "count": 0,
+    "description": "",
+    "deprecated": true
+  },
+  "claude-code": {
+    "count": 0,
+    "description": "",
+    "deprecated": true
+  },
+  "architecture-analysis": {
+    "count": 0,
+    "description": "",
+    "deprecated": true
+  },
+  "source-code-leak": {
+    "count": 0,
+    "description": "",
+    "deprecated": true
+  },
+  "agent-design": {
+    "count": 0,
+    "description": "",
+    "deprecated": true
+  },
+  "memory-system": {
+    "count": 0,
+    "description": "",
+    "deprecated": true
+  },
+  "jdk": {
+    "count": 1,
+    "description": ""
+  },
+  "java": {
+    "count": 1,
+    "description": ""
+  },
+  "evolution": {
+    "count": 2,
+    "description": ""
+  },
+  "lts": {
+    "count": 1,
+    "description": ""
+  },
+  "technology-history": {
+    "count": 1,
+    "description": ""
+  },
+  "openclaw": {
+    "count": 0,
+    "description": "",
+    "deprecated": true
+  },
+  "agent-framework": {
+    "count": 0,
+    "description": "",
+    "deprecated": true
+  },
+  "architecture": {
+    "count": 0,
+    "description": "",
+    "deprecated": true
+  },
+  "plugin-design": {
+    "count": 0,
+    "description": "",
+    "deprecated": true
+  },
+  "frontend": {
+    "count": 1,
+    "description": ""
+  },
+  "state-management": {
+    "count": 1,
+    "description": ""
+  },
+  "redux": {
+    "count": 1,
+    "description": ""
+  },
+  "signals": {
+    "count": 1,
+    "description": ""
+  },
+  "dialogue-structure": {
+    "count": 1,
+    "description": ""
+  },
+  "socratic-method": {
+    "count": 1,
+    "description": ""
+  },
+  "debate": {
+    "count": 1,
+    "description": ""
+  },
+  "communication": {
+    "count": 1,
+    "description": ""
+  },
+  "critical-thinking": {
+    "count": 1,
+    "description": ""
+  },
+  "text-to-video": {
+    "count": 1,
+    "description": ""
+  },
+  "ai-model": {
+    "count": 1,
+    "description": ""
+  },
+  "comparison": {
+    "count": 1,
+    "description": ""
+  },
+  "sora": {
+    "count": 1,
+    "description": ""
+  },
+  "veo": {
+    "count": 1,
+    "description": ""
+  },
+  "browser-extension": {
+    "count": 1,
+    "description": ""
+  },
+  "content-script": {
+    "count": 1,
+    "description": ""
+  },
+  "ai-integration": {
+    "count": 1,
+    "description": ""
+  },
+  "cross-platform": {
+    "count": 1,
+    "description": ""
+  },
+  "mv3": {
+    "count": 1,
+    "description": ""
+  }
+}

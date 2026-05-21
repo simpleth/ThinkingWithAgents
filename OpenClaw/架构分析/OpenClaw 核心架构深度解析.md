@@ -1,7 +1,12 @@
-# OpenClaw 核心架构深度解析
+﻿---
+title: "OpenClaw 核心架构深度解析"
+version: "v1.0"
+date: 2026-04
+tags: [openclaw, agent-framework, architecture, memory-system, plugin-design]
+status: published
+---
 
-> **版本**：v1.0
-> **更新**：2026-04
+# OpenClaw 核心架构深度解析
 
 ---
 

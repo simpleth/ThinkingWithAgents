@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-22 00:49",
+  "last_updated": "2026-05-22 01:18",
   "research_directions": [
     {
       "name": "Agent",
@@ -13,38 +13,15 @@
               "name": "AI 协作经验总结",
               "filename": "AI 协作经验总结.md",
               "path": "./Agent/实践经验总结/AI 协作经验总结.md",
-              "version": "v1.0",
-              "date": "2026-04",
-              "tags": [
-                "agent-collaboration",
-                "dry",
-                "yagni",
-                "best-practices",
-                "mistake-prevention"
-              ],
-              "status": "published",
-              "related": [
-                "设计实践.md",
-                "Claude Code 架构分析.md"
-              ]
+              "version": "-",
+              "date": "2026-05"
             },
             {
-              "name": "Agent 协作设计实践",
+              "name": "设计实践",
               "filename": "设计实践.md",
               "path": "./Agent/实践经验总结/设计实践.md",
-              "version": "v1.0",
-              "date": "2026-03",
-              "tags": [
-                "agent-collaboration",
-                "dry",
-                "yagni",
-                "over-engineering",
-                "document-design"
-              ],
-              "status": "published",
-              "related": [
-                "AI 协作经验总结.md"
-              ]
+              "version": "-",
+              "date": "2026-05"
             }
           ]
         },
@@ -56,19 +33,8 @@
               "name": "Claude Code 架构分析",
               "filename": "Claude Code 架构分析.md",
               "path": "./Agent/源码分析/Claude Code 架构分析.md",
-              "version": "v1.0",
-              "date": "2026-04",
-              "tags": [
-                "claude-code",
-                "architecture-analysis",
-                "source-code-leak",
-                "agent-design",
-                "memory-system"
-              ],
-              "status": "published",
-              "related": [
-                "OpenClaw 核心架构深度解析.md"
-              ]
+              "version": "-",
+              "date": "2026-05"
             }
           ]
         }
@@ -114,19 +80,8 @@
               "name": "OpenClaw 核心架构深度解析",
               "filename": "OpenClaw 核心架构深度解析.md",
               "path": "./OpenClaw/架构分析/OpenClaw 核心架构深度解析.md",
-              "version": "v1.0",
-              "date": "2026-04",
-              "tags": [
-                "openclaw",
-                "agent-framework",
-                "architecture",
-                "memory-system",
-                "plugin-design"
-              ],
-              "status": "published",
-              "related": [
-                "Claude Code 架构分析.md"
-              ]
+              "version": "-",
+              "date": "2026-05"
             }
           ]
         }

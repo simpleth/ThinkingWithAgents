@@ -1,8 +1,12 @@
-# Claude Code 架构分析
+﻿---
+title: "Claude Code 架构分析"
+version: "v1.0"
+date: 2026-04
+tags: [claude-code, architecture-analysis, source-code-leak, agent-design, memory-system]
+status: published
+---
 
-> **版本**：v1.0
-> **更新**：2026-04
-> **来源**：2026 年 3 月 31 日 npm 源映射泄露事件（512,000 行源码）
+# Claude Code 架构分析
 
 ---
 

@@ -1,7 +1,12 @@
-# AI 协作经验总结
+﻿---
+title: "AI 协作经验总结"
+version: "v1.0"
+date: 2026-04
+tags: [agent-collaboration, dry, yagni, best-practices, mistake-prevention]
+status: published
+---
 
-> **版本**：v1.0
-> **更新**：2026-04
+# AI 协作经验总结
 
 ---
 

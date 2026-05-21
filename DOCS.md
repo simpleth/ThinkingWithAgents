@@ -14,6 +14,9 @@
 | [.agent/README.md](./.agent/README.md) | 工具库 - Agent 可用工具列表、调用示例 |
 | [.web/README.md](./.web/README.md) | Web 前端模块 - 知识库可视化、调试系统说明 |
 | [.web/DEBUG.md](./.web/DEBUG.md) | 调试系统文档 - RUN/DEV 两级日志工具使用说明 |
+| [.docs/TAG_SYSTEM.md](./.docs/TAG_SYSTEM.md) | 标签系统设计 - frontmatter 标签规范、自动关联算法、同义词映射 |
+| [.docs/REPORT_GUIDE.md](./.docs/REPORT_GUIDE.md) | 报告编写规范 |
+| [.docs/create-report-tutorial.md](./.docs/create-report-tutorial.md) | 创建报告教程 |
 
 ---
 

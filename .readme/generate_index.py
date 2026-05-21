@@ -16,6 +16,7 @@ import json
 from pathlib import Path
 from datetime import datetime
 from urllib.parse import quote
+import re
 
 # matplotlib 为可选依赖，避免 CI 环境构建失败
 HAS_MATPLOTLIB = False
@@ -34,6 +35,7 @@ README_FILE = RESEARCH_ROOT / "README.md"
 TEMPLATE_FILE = RESEARCH_ROOT / ".readme" / "template.md"
 STATS_HISTORY_FILE = RESEARCH_ROOT / ".readme" / "stats_history.json"
 CHART_FILE = RESEARCH_ROOT / ".readme" / "stats_chart.png"
+TAGS_FILE = RESEARCH_ROOT / ".docs" / "tags.json"
 
 SKIP_DIRS = {"__pycache__", ".git", ".vscode", "node_modules", ".agent", ".scripts", ".readme", ".docs"}
 SKIP_FILES = {"template.md"}
@@ -65,6 +67,46 @@ def get_file_date(filepath):
     except:
         pass
     return datetime.fromtimestamp(os.path.getmtime(filepath)).strftime("%Y-%m")
+
+def parse_frontmatter(filepath):
+    """Parse YAML frontmatter from a markdown file (between --- delimiters)."""
+    try:
+        content = filepath.read_text(encoding="utf-8")
+        lines = content.split("\n")
+        if not lines or lines[0].strip() != "---":
+            return None
+
+        end_idx = None
+        for i in range(1, len(lines)):
+            if lines[i].strip() == "---":
+                end_idx = i
+                break
+
+        if end_idx is None:
+            return None
+
+        fm = {}
+        for line in lines[1:end_idx]:
+            stripped = line.strip()
+            if not stripped or ":" not in stripped:
+                continue
+            key, _, value = stripped.partition(":")
+            key = key.strip()
+            value = value.strip()
+
+            if value.startswith("[") and value.endswith("]"):
+                inner = value[1:-1]
+                items = [item.strip().strip('"').strip("'") for item in inner.split(",") if item.strip()]
+                fm[key] = items
+            else:
+                if (value.startswith('"') and value.endswith('"')) or \
+                   (value.startswith("'") and value.endswith("'")):
+                    value = value[1:-1]
+                fm[key] = value
+
+        return fm
+    except:
+        return None
 
 def get_current_stats():
     """获取当前目录下的统计数据"""
@@ -125,9 +167,94 @@ def update_history():
     save_history(history)
     return history
 
+def normalize_tag(tag: str) -> str:
+    tag = tag.strip().lower()
+    tag = re.sub(r'[\s/]+', '-', tag)
+    tag = re.sub(r'[^\w\-]', '', tag, flags=re.UNICODE)
+    tag = re.sub(r'-{2,}', '-', tag)
+    tag = tag.strip('-')
+    return tag
+
+def load_tags_config() -> dict:
+    if TAGS_FILE.exists():
+        try:
+            with open(TAGS_FILE, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except (json.JSONDecodeError, ValueError):
+            return {}
+    return {}
+
+def save_tags_config(config: dict):
+    TAGS_FILE.parent.mkdir(parents=True, exist_ok=True)
+    with open(TAGS_FILE, "w", encoding="utf-8") as f:
+        json.dump(config, f, ensure_ascii=False, indent=2)
+
+def resolve_tag(tag: str, config: dict) -> str:
+    normalized = normalize_tag(tag)
+    if normalized in config and "synonymOf" in config[normalized]:
+        return config[normalized]["synonymOf"]
+    return normalized
+
+def update_tags_config(all_reports: list, config: dict) -> dict:
+    tag_counts = {}
+    for report in all_reports:
+        seen = set()
+        for tag in report.get("tags", []):
+            resolved = resolve_tag(tag, config)
+            if resolved and resolved not in seen:
+                seen.add(resolved)
+                tag_counts[resolved] = tag_counts.get(resolved, 0) + 1
+
+    for tag_name, entry in config.items():
+        if tag_name in tag_counts:
+            entry["count"] = tag_counts[tag_name]
+            entry.pop("deprecated", None)
+        else:
+            entry["count"] = 0
+            entry["deprecated"] = True
+
+    for tag_name, count in tag_counts.items():
+        if tag_name not in config:
+            config[tag_name] = {"count": count, "description": ""}
+
+    return config
+
+def compute_auto_related(all_reports: list) -> dict:
+    related_map = {}
+    n = len(all_reports)
+
+    for i in range(n):
+        report_a = all_reports[i]
+        tags_a = set(report_a.get("tags", []))
+        path_a = report_a.get("path", "")
+        related_paths = []
+
+        for j in range(n):
+            if i == j:
+                continue
+            report_b = all_reports[j]
+            tags_b = set(report_b.get("tags", []))
+            path_b = report_b.get("path", "")
+
+            shared = len(tags_a & tags_b)
+
+            if shared >= 2:
+                related_paths.append(path_b)
+            elif shared == 1:
+                parts_a = path_a.split("/")
+                parts_b = path_b.split("/")
+                if len(parts_a) > 1 and len(parts_b) > 1 and parts_a[1] == parts_b[1]:
+                    related_paths.append(path_b)
+
+        if related_paths:
+            related_map[path_a] = related_paths
+
+    return related_map
+
 def scan_research_dirs():
     """扫描目录结构：研究方向/研究主题/报告.md"""
     research_dirs = []
+    all_reports = []
 
     for direction_path in sorted(RESEARCH_ROOT.iterdir()):
         if not direction_path.is_dir() or direction_path.name.startswith(".") or direction_path.name in SKIP_DIRS:
@@ -152,17 +279,56 @@ def scan_research_dirs():
             for report_path in sorted(topic_path.glob("*.md")):
                 if report_path.name in SKIP_FILES:
                     continue
-                topic["reports"].append({
-                    "name": report_path.stem,
-                    "filename": report_path.name,
-                    "path": "./" + report_path.relative_to(RESEARCH_ROOT).as_posix(),
-                    "version": get_file_version(report_path),
-                    "date": get_file_date(report_path)
-                })
+
+                fm = parse_frontmatter(report_path)
+
+                if fm:
+                    name = fm.get("title", report_path.stem)
+                    version = fm.get("version", get_file_version(report_path))
+                    date = fm.get("date", get_file_date(report_path))
+                    report_entry = {
+                        "name": name,
+                        "filename": report_path.name,
+                        "path": "./" + report_path.relative_to(RESEARCH_ROOT).as_posix(),
+                        "version": version,
+                        "date": date,
+                        "tags": [normalize_tag(t) for t in fm.get("tags", [])],
+                        "status": fm.get("status", "unknown"),
+                    }
+                    if "expiry" in fm:
+                        report_entry["expiry"] = fm["expiry"]
+                else:
+                    report_entry = {
+                        "name": report_path.stem,
+                        "filename": report_path.name,
+                        "path": "./" + report_path.relative_to(RESEARCH_ROOT).as_posix(),
+                        "version": get_file_version(report_path),
+                        "date": get_file_date(report_path)
+                    }
+
+                all_reports.append(report_entry)
+                topic["reports"].append(report_entry)
 
             direction["topics"].append(topic)
 
         research_dirs.append(direction)
+
+    config = load_tags_config()
+    config = update_tags_config(all_reports, config)
+    save_tags_config(config)
+
+    for report in all_reports:
+        if "tags" in report:
+            report["tags"] = [resolve_tag(t, config) for t in report["tags"]]
+
+    auto_related = compute_auto_related(all_reports)
+
+    for direction in research_dirs:
+        for topic in direction["topics"]:
+            for report in topic["reports"]:
+                path = report.get("path", "")
+                if path in auto_related:
+                    report["related"] = auto_related[path]
 
     return research_dirs
 

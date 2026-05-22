@@ -22,7 +22,7 @@ jobs:
         run: pip install pytest
 
       - name: Run Python tests
-        run: python -m pytest tests/ -v
+        run: python -m pytest .tests/ -v
 
   frontend-tests:
     runs-on: ubuntu-latest

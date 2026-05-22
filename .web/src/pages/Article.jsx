@@ -217,6 +217,39 @@ function Article({ articles, categories, isSidebarOpen = false }) {
             <span className="breadcrumb-current">{article.title}</span>
           </nav>
 
+          {article && (
+            <div className="article-meta-header">
+              <div className="article-meta-top">
+                {article.status && (
+                  <span className={`status-badge ${STATUS_CLASSES[article.status] || ''}`}>
+                    {STATUS_LABELS[article.status] || article.status}
+                  </span>
+                )}
+                {article.date && (() => {
+                  const [y, m] = article.date.split('-').map(Number)
+                  if (!y || !m) return null
+                  const months = (new Date().getFullYear() - y) * 12 + (new Date().getMonth() + 1 - m)
+                  if (months >= CONFIG.FRESHNESS.ARCHIVE_MONTHS) {
+                    return <span className="freshness-badge archived">已归档（{months}个月前）</span>
+                  }
+                  if (months >= CONFIG.FRESHNESS.STALE_MONTHS) {
+                    return <span className="freshness-badge stale">可能过时（{months}个月前）</span>
+                  }
+                  return null
+                })()}
+              </div>
+              {Array.isArray(article.tags) && article.tags.length > 0 && (
+                <div className="article-meta-tags">
+                  {article.tags.map(tag => (
+                    <Link key={tag} to={`/search?q=${encodeURIComponent(tag)}`} className="tag-pill-link">
+                      {tag}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
           {loading ? (
             <div className="article-loading">
               <div className="loading-spinner"></div>
@@ -230,40 +263,6 @@ function Article({ articles, categories, isSidebarOpen = false }) {
 
           {article && (
             <div className="article-footer">
-              {article.status && (
-                <div className="article-status-row">
-                  <span className={`status-badge ${STATUS_CLASSES[article.status] || ''}`}>
-                    {STATUS_LABELS[article.status] || article.status}
-                  </span>
-                </div>
-              )}
-
-              {article.date && (() => {
-                const [y, m] = article.date.split('-').map(Number)
-                if (!y || !m) return null
-                const months = (new Date().getFullYear() - y) * 12 + (new Date().getMonth() + 1 - m)
-                if (months >= CONFIG.FRESHNESS.ARCHIVE_MONTHS) {
-                  return <div className="article-expiry-row"><span className="expiry-label">已归档（{months}个月前更新）</span></div>
-                }
-                if (months >= CONFIG.FRESHNESS.STALE_MONTHS) {
-                  return <div className="article-expiry-row"><span className="expiry-label">可能过时（{months}个月前更新）</span></div>
-                }
-                return null
-              })()}
-
-              {Array.isArray(article.tags) && article.tags.length > 0 && (
-                <div className="article-tags-section">
-                  <h3 className="article-section-title">标签</h3>
-                  <div className="article-tags-list">
-                    {article.tags.map(tag => (
-                      <Link key={tag} to={`/search?q=${encodeURIComponent(tag)}`} className="tag-pill-link">
-                        {tag}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              )}
-
               {Array.isArray(article.related) && article.related.length > 0 && (() => {
                 const relatedArticles = article.related
                   .map(filename => articles.find(a =>

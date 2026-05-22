@@ -148,7 +148,16 @@ def extract_description(md_path):
             r'^\s*(>\s*)?(\*{0,2}(版本|更新|来源|作者|日期|类型|状态|数据来源|摘要)\*{0,2}\s*[:：])'
         )
 
+        start_idx = 0
+        if lines and lines[0].strip() == '---':
+            for i in range(1, len(lines)):
+                if lines[i].strip() == '---':
+                    start_idx = i + 1
+                    break
+
         for i, line in enumerate(lines):
+            if i < start_idx:
+                continue
             stripped = line.strip()
             if not stripped:
                 continue

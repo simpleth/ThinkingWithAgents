@@ -81,11 +81,7 @@ function Header({ categories, articles, isSidebarOpen, onToggleSidebar, theme, o
       return
     }
     clickTimer.current = setTimeout(() => { clickTimer.current = null }, 300)
-    if (!expandedCategories.has(catId)) {
-      setExpandedCategories(new Set([...expandedCategories, catId]))
-    }
-    navigate(`/category/${encodeURIComponent(catId)}`)
-    if (isMobile) onToggleSidebar()
+    toggleTopic(catId, topicName)
   }
 
   const toggleAllTopicsForCategory = (catId, e) => {

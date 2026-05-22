@@ -39,6 +39,10 @@ jobs:
           cache: 'npm'
           cache-dependency-path: .web/package-lock.json
 
+      - name: Sync lock file
+        working-directory: .web
+        run: npm install --package-lock-only --ignore-scripts
+
       - name: Install dependencies
         working-directory: .web
         run: npm ci

@@ -34,7 +34,8 @@ function Article({ articles, categories, isSidebarOpen = false }) {
       fetch(article.path)
         .then(res => res.text())
         .then(text => {
-          setContent(text)
+          const cleaned = text.startsWith('---') ? text.replace(/^---[\s\S]*?---\n*/, '') : text
+          setContent(cleaned)
           setLoading(false)
         })
         .catch(() => {

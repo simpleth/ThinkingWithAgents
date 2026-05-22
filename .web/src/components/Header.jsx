@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import './Header.css'
 import { CONFIG } from '../config'
@@ -34,6 +34,7 @@ function Header({ categories, articles, isSidebarOpen, onToggleSidebar, theme, o
   const [expandedCategories, setExpandedCategories] = useState(new Set())
   const [expandedTopics, setExpandedTopics] = useState(new Set())
   const [currentArticleId, setCurrentArticleId] = useState(null)
+  const clickTimer = useRef(null)
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -58,6 +59,28 @@ function Header({ categories, articles, isSidebarOpen, onToggleSidebar, theme, o
   }
 
   const handleCategoryClick = (catId) => {
+    if (clickTimer.current) {
+      clearTimeout(clickTimer.current)
+      clickTimer.current = null
+      toggleAllTopicsForCategory(catId)
+      return
+    }
+    clickTimer.current = setTimeout(() => { clickTimer.current = null }, 300)
+    if (!expandedCategories.has(catId)) {
+      setExpandedCategories(new Set([...expandedCategories, catId]))
+    }
+    navigate(`/category/${encodeURIComponent(catId)}`)
+    if (isMobile) onToggleSidebar()
+  }
+
+  const handleTopicClick = (catId, topicName) => {
+    if (clickTimer.current) {
+      clearTimeout(clickTimer.current)
+      clickTimer.current = null
+      toggleTopic(catId, topicName)
+      return
+    }
+    clickTimer.current = setTimeout(() => { clickTimer.current = null }, 300)
     if (!expandedCategories.has(catId)) {
       setExpandedCategories(new Set([...expandedCategories, catId]))
     }
@@ -215,7 +238,7 @@ function Header({ categories, articles, isSidebarOpen, onToggleSidebar, theme, o
                           <span className="tree-arrow" onClick={(e) => toggleTopic(cat.id, topicName, e)}>
                             {isTopicExpanded ? '▼' : '▶'}
                           </span>
-                          <span className="topic-body" onClick={() => handleCategoryClick(cat.id)}>
+                          <span className="topic-body" onClick={() => handleTopicClick(cat.id, topicName)}>
                             <span className="topic-name">{topicName}</span>
                             <span className="topic-count">({topicData.articles.length})</span>
                           </span>

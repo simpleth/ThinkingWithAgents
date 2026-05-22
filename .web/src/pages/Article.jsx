@@ -34,7 +34,12 @@ function Article({ articles, categories, isSidebarOpen = false }) {
       fetch(article.path)
         .then(res => res.text())
         .then(text => {
-          const cleaned = text.startsWith('---') ? text.replace(/^---[\s\S]*?---\n*/, '') : text
+          const lines = text.split(/\r?\n/)
+          let cleaned = text
+          if (lines[0].trim() === '---') {
+            const endIdx = lines.findIndex((l, i) => i > 0 && l.trim() === '---')
+            if (endIdx > 0) cleaned = lines.slice(endIdx + 1).join('\n').trimStart()
+          }
           setContent(cleaned)
           setLoading(false)
         })

@@ -2,7 +2,7 @@
 
 > 本索引由脚本自动生成，请勿手动编辑
 >
-> 最后更新：2026-05-22 13:12
+> 最后更新：2026-05-22 21:06
 >
 > 数据源：[index.json](./.readme/index.json)
 >
@@ -23,8 +23,8 @@
 
 | 研究主题 | 报告数量 | 最新报告 |
 |----------|----------|----------|
-| [实践经验总结](./Agent/实践经验总结/) | 2 | - |
-| [源码分析](./Agent/源码分析/) | 1 | - |
+| [实践经验总结](./Agent/实践经验总结/) | 2 | v1.0 |
+| [源码分析](./Agent/源码分析/) | 1 | v1.0 |
 
 ### JDK
 
@@ -36,7 +36,7 @@
 
 | 研究主题 | 报告数量 | 最新报告 |
 |----------|----------|----------|
-| [架构分析](./OpenClaw/架构分析/) | 1 | - |
+| [架构分析](./OpenClaw/架构分析/) | 1 | v1.0 |
 
 ### tests
 
@@ -76,10 +76,10 @@
 **Agent**
 
 - **实践经验总结**:
-  - [AI 协作经验总结](./Agent/%E5%AE%9E%E8%B7%B5%E7%BB%8F%E9%AA%8C%E6%80%BB%E7%BB%93/AI%20%E5%8D%8F%E4%BD%9C%E7%BB%8F%E9%AA%8C%E6%80%BB%E7%BB%93.md) `-`
-  - [设计实践](./Agent/%E5%AE%9E%E8%B7%B5%E7%BB%8F%E9%AA%8C%E6%80%BB%E7%BB%93/%E8%AE%BE%E8%AE%A1%E5%AE%9E%E8%B7%B5.md) `-`
+  - [AI 协作经验总结](./Agent/%E5%AE%9E%E8%B7%B5%E7%BB%8F%E9%AA%8C%E6%80%BB%E7%BB%93/AI%20%E5%8D%8F%E4%BD%9C%E7%BB%8F%E9%AA%8C%E6%80%BB%E7%BB%93.md) `v1.0`
+  - [Agent 协作设计实践](./Agent/%E5%AE%9E%E8%B7%B5%E7%BB%8F%E9%AA%8C%E6%80%BB%E7%BB%93/%E8%AE%BE%E8%AE%A1%E5%AE%9E%E8%B7%B5.md) `v1.0`
 - **源码分析**:
-  - [Claude Code 架构分析](./Agent/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/Claude%20Code%20%E6%9E%B6%E6%9E%84%E5%88%86%E6%9E%90.md) `-`
+  - [Claude Code 架构分析](./Agent/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/Claude%20Code%20%E6%9E%B6%E6%9E%84%E5%88%86%E6%9E%90.md) `v1.0`
 
 **JDK**
 
@@ -89,7 +89,7 @@
 **OpenClaw**
 
 - **架构分析**:
-  - [OpenClaw 核心架构深度解析](./OpenClaw/%E6%9E%B6%E6%9E%84%E5%88%86%E6%9E%90/OpenClaw%20%E6%A0%B8%E5%BF%83%E6%9E%B6%E6%9E%84%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90.md) `-`
+  - [OpenClaw 核心架构深度解析](./OpenClaw/%E6%9E%B6%E6%9E%84%E5%88%86%E6%9E%90/OpenClaw%20%E6%A0%B8%E5%BF%83%E6%9E%B6%E6%9E%84%E6%B7%B1%E5%BA%A6%E8%A7%A3%E6%9E%90.md) `v1.0`
 
 **tests**
 

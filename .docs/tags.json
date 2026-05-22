@@ -1,63 +1,51 @@
 {
   "agent-collaboration": {
-    "count": 0,
-    "description": "",
-    "deprecated": true
+    "count": 2,
+    "description": ""
   },
   "dry": {
-    "count": 0,
-    "description": "",
-    "deprecated": true
+    "count": 2,
+    "description": ""
   },
   "yagni": {
-    "count": 0,
-    "description": "",
-    "deprecated": true
+    "count": 2,
+    "description": ""
   },
   "best-practices": {
-    "count": 0,
-    "description": "",
-    "deprecated": true
+    "count": 1,
+    "description": ""
   },
   "mistake-prevention": {
-    "count": 0,
-    "description": "",
-    "deprecated": true
+    "count": 1,
+    "description": ""
   },
   "over-engineering": {
-    "count": 0,
-    "description": "",
-    "deprecated": true
+    "count": 1,
+    "description": ""
   },
   "document-design": {
-    "count": 0,
-    "description": "",
-    "deprecated": true
+    "count": 1,
+    "description": ""
   },
   "claude-code": {
-    "count": 0,
-    "description": "",
-    "deprecated": true
+    "count": 1,
+    "description": ""
   },
   "architecture-analysis": {
-    "count": 0,
-    "description": "",
-    "deprecated": true
+    "count": 1,
+    "description": ""
   },
   "source-code-leak": {
-    "count": 0,
-    "description": "",
-    "deprecated": true
+    "count": 1,
+    "description": ""
   },
   "agent-design": {
-    "count": 0,
-    "description": "",
-    "deprecated": true
+    "count": 1,
+    "description": ""
   },
   "memory-system": {
-    "count": 0,
-    "description": "",
-    "deprecated": true
+    "count": 2,
+    "description": ""
   },
   "jdk": {
     "count": 1,
@@ -80,24 +68,20 @@
     "description": ""
   },
   "openclaw": {
-    "count": 0,
-    "description": "",
-    "deprecated": true
+    "count": 1,
+    "description": ""
   },
   "agent-framework": {
-    "count": 0,
-    "description": "",
-    "deprecated": true
+    "count": 1,
+    "description": ""
   },
   "architecture": {
-    "count": 0,
-    "description": "",
-    "deprecated": true
+    "count": 1,
+    "description": ""
   },
   "plugin-design": {
-    "count": 0,
-    "description": "",
-    "deprecated": true
+    "count": 1,
+    "description": ""
   },
   "frontend": {
     "count": 1,

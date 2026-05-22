@@ -50,7 +50,7 @@ def get_file_version(filepath):
     if filepath.stem.startswith("report_v"):
         return filepath.stem.replace("report_v", "v")
     try:
-        content = filepath.read_text(encoding="utf-8")[:500]
+        content = filepath.read_text(encoding="utf-8-sig")[:500]
         for line in content.split("\n"):
             if "**版本**" in line and "v" in line:
                 return line.split("v")[-1].split()[0].rstrip("*")
@@ -60,7 +60,7 @@ def get_file_version(filepath):
 
 def get_file_date(filepath):
     try:
-        content = filepath.read_text(encoding="utf-8")[:500]
+        content = filepath.read_text(encoding="utf-8-sig")[:500]
         for line in content.split("\n"):
             if "**更新**" in line and "20" in line:
                 return line.split("20")[-1].strip().rstrip("*")
@@ -71,7 +71,7 @@ def get_file_date(filepath):
 def parse_frontmatter(filepath):
     """Parse YAML frontmatter from a markdown file (between --- delimiters)."""
     try:
-        content = filepath.read_text(encoding="utf-8")
+        content = filepath.read_text(encoding="utf-8-sig")
         lines = content.split("\n")
         if not lines or lines[0].strip() != "---":
             return None
